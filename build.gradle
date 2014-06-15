@@ -74,6 +74,9 @@ dependencies {
     compile "org.hibernate:hibernate-ehcache:4.2.7.Final"
     compile "mysql:mysql-connector-java:5.1.30"
     compile "com.mchange:c3p0:0.9.5-pre8"
+    
+    // httpclient
+    compile "org.apache.httpcomponents:httpclient:4.2"
 
     //other
     compile "com.google.guava:guava:16.0"

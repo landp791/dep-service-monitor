@@ -1,15 +1,15 @@
 package com.dep.monitor.model;
 
-public class Owner {
-
-	private String id;
+public class ApplicationOwner {
+	private String url;
 	private String name;
 	private String email;
-	public String getId() {
-		return id;
+	
+	public String getUrl() {
+		return url;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	public String getName() {
 		return name;

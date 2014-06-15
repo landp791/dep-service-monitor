@@ -15,6 +15,8 @@ public class MonitorController {
 	
 	@Autowired
 	private MonitorService monitorService;
+	
+	
 
 	@RequestMapping(value="/app/monitor")
 	public void monitorSpecifiedService(@RequestParam("serviceUrl")String serviceUrl) {

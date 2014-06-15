@@ -7,7 +7,7 @@ public class Application {
 	
 	private String url;
 	
-	private List<AppOwner> owners;
+	private List<Owner> owners;
 
 	public String getUrl() {
 		return url;
@@ -17,11 +17,11 @@ public class Application {
 		this.url = url;
 	}
 
-	public List<AppOwner> getOwners() {
+	public List<Owner> getOwners() {
 		return owners;
 	}
 
-	public void setOwners(List<AppOwner> owners) {
+	public void setOwners(List<Owner> owners) {
 		this.owners = owners;
 	}
 	

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dep.monitor.model.ApplicationOwner;
 import com.dep.monitor.repo.AppOwnerRepository;
+import com.dep.monitor.service.EmailService;
 import com.dep.monitor.service.MonitorService;
 
 @Controller
@@ -22,18 +23,23 @@ public class MonitorController {
 	private MonitorService monitorService;
 	
 	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
 	private AppOwnerRepository repository;
 
 	@RequestMapping(value="/app/monitor")
-	public void monitorSpecifiedService(@RequestParam("serviceUrl")String url) {
+	public void monitorSpecifiedService2(@RequestParam("serviceUrl")String url) {
+		logger.debug("Monitor specified service start." + url);
 		List<ApplicationOwner> appOwners = repository.queryByUrl(url);
 		if (CollectionUtils.isEmpty(appOwners)) {
-			logger.warn("No config for this url!["+ url +"]");
+			logger.warn("No config for the url!["+ url +"]");
 			return;
 		}
-		int respCode = monitorService.tryToMonitor(url);
+		boolean isOK = monitorService.tryToMonitor(url);
 		
-		monitorService.sendEmails(url, appOwners, respCode);
+		emailService.sendEmails(url, appOwners, isOK);
+		logger.debug("Monitor specified service finish." + url);
 	}
 	
 	@RequestMapping(value="/all/monitor")

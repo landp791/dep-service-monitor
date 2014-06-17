@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,19 +53,19 @@ public class EmailService {
 	} 
 	
     private void sendGoodNews(String url, List<ApplicationOwner> appOwners) {
-        SaeMail mail = createSaeMailInstance();
+        SaeMail mail = createSaeMailInstance(appOwners);
         Map<String, Object> model = Maps.newHashMap();
-        model.put("service", appOwners);
-
-        sendMail("[通知]您负责的服务已经正常工作!", mail, model, GOOD_NEWS_TEMPLATE);
-
+        model.put("url", url);
+        
+        sendMail("[通知]您负责的服务正在正常工作!", mail, model, GOOD_NEWS_TEMPLATE);
+        
         logger.debug("send good news mail finish.");
     }
     
 	private void sendBadNews(String url, List<ApplicationOwner> appOwners){
-        SaeMail mail = createSaeMailInstance();
+        SaeMail mail = createSaeMailInstance(appOwners);
         Map<String, Object> model = Maps.newHashMap();
-        model.put("service", appOwners);
+        model.put("url", url);
 
         sendMail("[通知]您负责的服务没有正常工作!", mail, model, BAD_NEWS_TEMPLATE);
 
@@ -85,9 +86,7 @@ public class EmailService {
         }
     }
 	
-
-	
-    private SaeMail createSaeMailInstance() {
+    private SaeMail createSaeMailInstance(List<ApplicationOwner> appOwners) {
         SaeMail mail = new SaeMail();
         mail.setFrom(sendMail);
         mail.setSmtpUsername(sendMail);
@@ -95,9 +94,17 @@ public class EmailService {
         mail.setSmtpHost(smtpHost);
         mail.setSmtpPort(smtpPort);
 
-        mail.setTo(toMail.split(","));
+        mail.setTo(joinToMail(appOwners));
         mail.setContentType("HTML");
-        mail.setChartset("UTF-8");
+        mail.setChartset(MAIL_ENCODING);
         return mail;
+    }
+    
+    private String[] joinToMail(List<ApplicationOwner> appOwners) {
+    	String[] toMailArray = new String[appOwners.size()];
+    	for (ApplicationOwner appOwner : appOwners) {
+    		ArrayUtils.add(toMailArray, appOwner.getEmail());
+    	}
+    	return toMailArray;
     }
 }

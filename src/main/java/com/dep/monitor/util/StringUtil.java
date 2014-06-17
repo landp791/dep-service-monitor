@@ -6,12 +6,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class StringUtil {
 
-	/**
-	 * 
-	 * @return
-	 */
-	public static String UUID() {
+	public static String UUID(String prefix) {
 		UUID uuid = UUID.randomUUID();
-		return StringUtils.replace(uuid.toString(), "-", "");
+		return prefix + StringUtils.replace(uuid.toString(), "-", "");
 	}
 }

@@ -10,7 +10,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.dep.monitor.model.ApplicationOwner;
+import com.dep.monitor.model.ServiceOwner;
 import com.dep.monitor.repo.AppOwnerRepository;
 import com.dep.monitor.service.EmailService;
 import com.dep.monitor.service.MonitorService;
@@ -31,7 +31,7 @@ public class MonitorController {
 	@RequestMapping(value="/app/monitor")
 	public void monitorSpecifiedService2(@RequestParam("serviceUrl")String url) {
 		logger.debug("Monitor specified service start." + url);
-		List<ApplicationOwner> appOwners = repository.queryByUrl(url);
+		List<ServiceOwner> appOwners = repository.queryByUrl(url);
 		if (CollectionUtils.isEmpty(appOwners)) {
 			logger.warn("No config for the url!["+ url +"]");
 			return;

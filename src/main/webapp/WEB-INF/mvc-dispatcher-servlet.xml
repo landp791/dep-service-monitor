@@ -55,10 +55,8 @@
     </bean>
 
     <bean id="writeDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource " destroy-method="close">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/deblog"/>
-        <property name="user" value="root"/>
-        <property name="password" value="root"/>
+        <property name="driverClass" value="org.sqlite.JDBC"/>
+        <property name="jdbcUrl" value="jdbc:sqlite:WEB-INF/db/dep_service_monitor.db"/>
         <property name="acquireIncrement" value="1"/>
         <property name="initialPoolSize" value="5"/>
         <property name="maxPoolSize" value="20"/>

@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
-import com.dep.monitor.model.ApplicationOwner;
+import com.dep.monitor.model.ServiceOwner;
 import com.google.common.collect.Maps;
 import com.sina.sae.mail.SaeMail;
 
@@ -44,7 +45,7 @@ public class EmailService {
     @Resource(name = "velocityConfigurer")
     private VelocityConfigurer velocityConfigurer;
 
-	public void sendEmails(String url, List<ApplicationOwner> appOwners, boolean isOK) {
+	public void sendEmails(String url, List<ServiceOwner> appOwners, boolean isOK) {
 		if (isOK) {
 			sendGoodNews(url, appOwners);
 		} else {
@@ -52,7 +53,7 @@ public class EmailService {
 		}
 	} 
 	
-    private void sendGoodNews(String url, List<ApplicationOwner> appOwners) {
+    private void sendGoodNews(String url, List<ServiceOwner> appOwners) {
         SaeMail mail = createSaeMailInstance(appOwners);
         Map<String, Object> model = Maps.newHashMap();
         model.put("url", url);
@@ -62,7 +63,7 @@ public class EmailService {
         logger.debug("send good news mail finish.");
     }
     
-	private void sendBadNews(String url, List<ApplicationOwner> appOwners){
+	private void sendBadNews(String url, List<ServiceOwner> appOwners){
         SaeMail mail = createSaeMailInstance(appOwners);
         Map<String, Object> model = Maps.newHashMap();
         model.put("url", url);
@@ -86,7 +87,7 @@ public class EmailService {
         }
     }
 	
-    private SaeMail createSaeMailInstance(List<ApplicationOwner> appOwners) {
+    private SaeMail createSaeMailInstance(List<ServiceOwner> appOwners) {
         SaeMail mail = new SaeMail();
         mail.setFrom(sendMail);
         mail.setSmtpUsername(sendMail);
@@ -100,11 +101,14 @@ public class EmailService {
         return mail;
     }
     
-    private String[] joinToMail(List<ApplicationOwner> appOwners) {
+    private String[] joinToMail(List<ServiceOwner> appOwners) {
     	String[] toMailArray = new String[appOwners.size()];
-    	for (ApplicationOwner appOwner : appOwners) {
-    		ArrayUtils.add(toMailArray, appOwner.getEmail());
+    	for (ServiceOwner appOwner : appOwners) {
+//    		ArrayUtils.add(toMailArray, appOwner.getEmail());
+    		ArrayUtils.add(toMailArray, "landongpingpub@163.com");
     	}
     	return toMailArray;
     }
+    
+
 }

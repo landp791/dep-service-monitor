@@ -6,17 +6,13 @@
     <persistence-unit name="mainPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>writeDataSource</non-jta-data-source>
-        <class>com.github.dba.model.Blog</class>
-        <class>com.github.dba.model.DepGroup</class>
-        <class>com.github.dba.model.DepMember</class>
-        <class>com.github.dba.model.BlogView</class>
+        <class>com.dep.monitor.model.Owner</class>
+        <class>com.dep.monitor.model.Service</class>
+        <class>com.dep.monitor.model.ServiceOwner</class>
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/deblog" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="root" />
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:WEB-INF/db/dep_service_monitor.db" />
+            <property name="hibernate.dialect" value="com.demo.dialect.SQLiteDialect" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
         </properties>
@@ -25,17 +21,13 @@
     <persistence-unit name="queryPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>readDataSource</non-jta-data-source>
-        <class>com.github.dba.model.Blog</class>
-        <class>com.github.dba.model.DepGroup</class>
-        <class>com.github.dba.model.DepMember</class>
-        <class>com.github.dba.model.BlogView</class>
+        <class>com.dep.monitor.model.Owner</class>
+        <class>com.dep.monitor.model.Service</class>
+        <class>com.dep.monitor.model.ServiceOwner</class>
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/deblog" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="root" />
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:WEB-INF/db/dep_service_monitor.db" />
+            <property name="hibernate.dialect" value="com.demo.dialect.SQLiteDialect" />
             <property name="hibernate.show_sql" value="true" />
         </properties>
     </persistence-unit>

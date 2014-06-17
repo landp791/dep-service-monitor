@@ -72,8 +72,9 @@ dependencies {
     compile "org.hibernate:hibernate-entitymanager:" + hibernateVersion
     compile "org.hibernate:hibernate-core:" + hibernateVersion
     compile "org.hibernate:hibernate-ehcache:4.2.7.Final"
-    compile "mysql:mysql-connector-java:5.1.30"
+    // compile "mysql:mysql-connector-java:5.1.30"
     compile "com.mchange:c3p0:0.9.5-pre8"
+    compile files('./lib/sqlite-jdbc-3.7.2.jar')
     
     // httpclient
     compile "org.apache.httpcomponents:httpclient:4.2"

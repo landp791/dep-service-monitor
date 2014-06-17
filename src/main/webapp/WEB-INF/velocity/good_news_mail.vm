@@ -1,0 +1,7 @@
+<h2>您负责的服务没有正常工作！请处理。</h2>
+<br/>
+<br/>
+
+<h4>详情如下：</h4>
+<br/>
+<h4><a href="$service.url" target="_blank">服务地址</a></h4>

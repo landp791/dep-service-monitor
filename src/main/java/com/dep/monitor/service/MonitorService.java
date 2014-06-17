@@ -2,8 +2,6 @@ package com.dep.monitor.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.ClientProtocolException;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dep.monitor.controller.MonitorController;
-import com.dep.monitor.model.ApplicationOwner;
 import com.dep.monitor.util.HeadRequest;
 
 @Service

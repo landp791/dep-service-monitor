@@ -22,6 +22,8 @@ import com.sina.sae.mail.SaeMail;
 public class EmailService {
 	private static final Log logger = LogFactory.getLog(EmailService.class);
 	private static final String MAIL_ENCODING = "UTF-8";
+	private static final String GOOD_NEWS_TEMPLATE = "good_news_mail.vm";
+	private static final String BAD_NEWS_TEMPLATE = "bad_news_mail.vm";
 	
     @Value("${send_mail}")
     private String sendMail;
@@ -45,19 +47,29 @@ public class EmailService {
 		if (isOK) {
 			sendGoodNews(url, appOwners);
 		} else {
-			sendBadNews();
+			sendBadNews(url, appOwners);
 		}
 	} 
 	
     private void sendGoodNews(String url, List<ApplicationOwner> appOwners) {
         SaeMail mail = createSaeMailInstance();
         Map<String, Object> model = Maps.newHashMap();
-        model.put("blogs", appOwners);
+        model.put("service", appOwners);
 
-        sendMail("[通知]有人发文章啦~大家速顶!", mail, model, "new_blog_mail.vm");
+        sendMail("[通知]您负责的服务已经正常工作!", mail, model, GOOD_NEWS_TEMPLATE);
 
-        logger.debug("send new blogs mail finish");
+        logger.debug("send good news mail finish.");
     }
+    
+	private void sendBadNews(String url, List<ApplicationOwner> appOwners){
+        SaeMail mail = createSaeMailInstance();
+        Map<String, Object> model = Maps.newHashMap();
+        model.put("service", appOwners);
+
+        sendMail("[通知]您负责的服务没有正常工作!", mail, model, BAD_NEWS_TEMPLATE);
+
+        logger.debug("send bad news mail finish.");
+	}
 	
     private void sendMail(String subject, SaeMail mail, Map<String, Object> model, String temple) {
         mail.setSubject(subject);
@@ -69,13 +81,11 @@ public class EmailService {
 
         mail.setContent(content);
         if (!mail.send()) {
-        	logger.debug("send mail fail");
+        	logger.debug("send mail fail.");
         }
     }
 	
-	private void sendBadNews(){
-		
-	}
+
 	
     private SaeMail createSaeMailInstance() {
         SaeMail mail = new SaeMail();

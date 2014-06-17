@@ -38,9 +38,9 @@ dependencies {
     )
 
     //mail
-    //compile files('./lib/sae-local-1.1.0.jar')
-    //compile files('./lib/mail.jar')
-    //compile("org.apache.velocity:velocity:1.7")
+    compile files('./lib/sae-local-1.1.0.jar')
+    compile files('./lib/mail.jar')
+    compile("org.apache.velocity:velocity:1.7")
 
     //spring
     compile("org.springframework:spring-context:" + springVersion)

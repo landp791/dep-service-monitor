@@ -1,9 +1,27 @@
 package com.dep.monitor.model;
 
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.springframework.data.annotation.Id;
+
+@Entity(name = "service")
+@Table(name = "owner", uniqueConstraints = @UniqueConstraint(columnNames = {"umAccount"}))
 public class Service {
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private String serviceId;
+	
+    @Basic
 	private String serviceName;
+    
+    @Basic
 	private String serviceUrl;
+    
 	public String getServiceId() {
 		return serviceId;
 	}

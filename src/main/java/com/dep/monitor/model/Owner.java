@@ -1,8 +1,22 @@
 package com.dep.monitor.model;
 
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity(name = "owner")
+@Table(name = "owner", uniqueConstraints = @UniqueConstraint(columnNames = {"umAccount"}))
 public class Owner {
+	
+    @Id
 	private String umAccount;
+    
+    @Basic
 	private String name;
+    
+    @Basic
 	private String mail;
 	
 	public String getUmAccount() {

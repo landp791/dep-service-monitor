@@ -9,7 +9,6 @@ import javax.persistence.UniqueConstraint;
 @Entity(name = "owner")
 @Table(name = "owner", uniqueConstraints = @UniqueConstraint(columnNames = {"umAccount"}))
 public class Owner {
-	
     @Id
 	private String umAccount;
     

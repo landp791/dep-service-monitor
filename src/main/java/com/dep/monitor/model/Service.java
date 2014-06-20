@@ -10,7 +10,7 @@ import javax.persistence.UniqueConstraint;
 import org.springframework.data.annotation.Id;
 
 @Entity(name = "service")
-@Table(name = "owner", uniqueConstraints = @UniqueConstraint(columnNames = {"umAccount"}))
+@Table(name = "service", uniqueConstraints = @UniqueConstraint(columnNames = {"serviceId"}))
 public class Service {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

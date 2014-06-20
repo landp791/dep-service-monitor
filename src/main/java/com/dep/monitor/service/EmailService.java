@@ -4,8 +4,6 @@ import static java.lang.String.format;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -58,7 +56,7 @@ public class EmailService {
         Map<String, Object> model = Maps.newHashMap();
         model.put("url", url);
         
-        sendMail("[Í¨Öª]Äú¸ºÔðµÄ·þÎñÕýÔÚÕý³£¹¤×÷!", mail, model, GOOD_NEWS_TEMPLATE);
+        sendMail("[Í¨Öª]ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!", mail, model, GOOD_NEWS_TEMPLATE);
         
         logger.debug("send good news mail finish.");
     }
@@ -68,7 +66,7 @@ public class EmailService {
         Map<String, Object> model = Maps.newHashMap();
         model.put("url", url);
 
-        sendMail("[Í¨Öª]Äú¸ºÔðµÄ·þÎñÃ»ÓÐÕý³£¹¤×÷!", mail, model, BAD_NEWS_TEMPLATE);
+        sendMail("[Í¨Öª]ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!", mail, model, BAD_NEWS_TEMPLATE);
 
         logger.debug("send bad news mail finish.");
 	}
@@ -104,7 +102,6 @@ public class EmailService {
     private String[] joinToMail(List<ServiceOwner> appOwners) {
     	String[] toMailArray = new String[appOwners.size()];
     	for (ServiceOwner appOwner : appOwners) {
-//    		ArrayUtils.add(toMailArray, appOwner.getEmail());
     		ArrayUtils.add(toMailArray, "landongpingpub@163.com");
     	}
     	return toMailArray;

@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 集成方式：JobDetailFactoryBean，并且任务类需要继承QuartzJobBean -->
+	<!-- 定义jobDetail -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.dep.monitor.quartz.ServiceMonitorJob"></property>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="headRequest" value-ref="headRequest"/>
+			</map>
+		</property>
+	</bean>
+
+	<!-- 另一种触发器是CornTrigger -->
+	<bean id="cornTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 每个10秒触发 -->
+		<property name="cronExpression" value="0/10 * * * * ?" />
+	</bean>
+
+	<!-- 定义核心调度器 -->
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<ref bean="cornTrigger" />
+		</property>
+	</bean>
+
+	<bean id="quartzJobBean"
+		class="org.springframework.scheduling.quartz.QuartzJobBean">
+	</bean>
+ 
+</beans>

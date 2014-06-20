@@ -78,6 +78,10 @@ dependencies {
     
     // httpclient
     compile "org.apache.httpcomponents:httpclient:4.2"
+    
+    // quartz
+    compile "org.quartz-scheduler:quartz:2.1.7"
+    compile "org.quartz-scheduler:quartz:2.1.7"
 
     //other
     compile "com.google.guava:guava:16.0"

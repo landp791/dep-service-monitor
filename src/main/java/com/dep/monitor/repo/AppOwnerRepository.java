@@ -13,4 +13,7 @@ public interface AppOwnerRepository {
 
 	@Query("select * from app_email ae where ae.url = :blogId")
 	List<ServiceOwner> queryByUrl(@Param("url") String url);
+	
+	@Query("select * from app_email ae")
+	List<ServiceOwner> queryAllUrl();
 }

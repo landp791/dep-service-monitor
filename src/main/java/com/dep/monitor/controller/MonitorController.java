@@ -28,7 +28,7 @@ public class MonitorController {
 	@Autowired
 	private AppOwnerRepository repository;
 
-	@RequestMapping(value="/app/monitor")
+	@RequestMapping(value="/service/monitor")
 	public void monitorSpecifiedService2(@RequestParam("serviceUrl")String url) {
 		logger.debug("Monitor specified service start." + url);
 		List<ServiceOwner> appOwners = repository.queryByUrl(url);
@@ -44,11 +44,11 @@ public class MonitorController {
 	
 	@RequestMapping(value="/all/monitor")
 	public void monitorAllService(){
-		logger.info("MonitorAllService is invoked!");
+		logger.debug("MonitorAllService is invoked!");
 	}
 	
 	@RequestMapping(value="/app/add")
 	public void addService() {
-		logger.info("AddService is invoked!");
+		logger.debug("AddService is invoked!");
 	}
 }

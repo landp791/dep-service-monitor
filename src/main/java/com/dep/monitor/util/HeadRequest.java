@@ -15,7 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component(value = "headRequest")
 @Scope("prototype") 
 public class HeadRequest {
 	HeadRequest request;
@@ -49,7 +49,8 @@ public class HeadRequest {
 		return response.getStatusLine().getStatusCode();
 	}
 	
-	public boolean isOK(int responseCode) {
+	public boolean isOK() throws ClientProtocolException, IOException {
+		int responseCode = getResponseCode();
 		return responseCode == 200;
 	}
 	

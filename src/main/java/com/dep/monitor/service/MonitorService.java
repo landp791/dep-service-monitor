@@ -2,6 +2,7 @@ package com.dep.monitor.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.ClientProtocolException;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dep.monitor.controller.MonitorController;
+import com.dep.monitor.repo.AppOwnerRepository;
 import com.dep.monitor.util.HeadRequest;
 
 @Service
@@ -18,10 +20,12 @@ public class MonitorService {
 	@Autowired
 	HeadRequest head;
 	
+	@Autowired
+	private AppOwnerRepository repository;
+	
 	public boolean tryToMonitor(String url) {
 		try {
-			int respCode = head.withUrl(url).getResponseCode();
-			return head.isOK(respCode);
+			return head.withUrl(url).isOK();
 		} catch (URISyntaxException e) {
 			logger.error("Url is not valid![" + url + "]", e);
 		} catch (ClientProtocolException e) {

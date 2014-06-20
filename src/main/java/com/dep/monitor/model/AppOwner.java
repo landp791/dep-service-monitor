@@ -5,20 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-@Entity(name = "serviceOwner")
-@Table(name = "serviceOwner", uniqueConstraints = @UniqueConstraint(columnNames = {"serviceId", "umAccount"}))
-public class ServiceOwner {
+@Entity(name = "appOwner")
+@Table(name = "appOwner", uniqueConstraints = @UniqueConstraint(columnNames = {"appId", "umAccount"}))
+public class AppOwner {
 	@Basic
-	private String serviceId;
+	private String appId;
 	
 	@Basic
 	private String umAccount;
 	
-	public String getServiceId() {
-		return serviceId;
+	public String getAppId() {
+		return appId;
 	}
-	public void setServiceId(String serviceId) {
-		this.serviceId = serviceId;
+	public void setAppId(String appId) {
+		this.appId = appId;
 	}
 	public String getUmAccount() {
 		return umAccount;

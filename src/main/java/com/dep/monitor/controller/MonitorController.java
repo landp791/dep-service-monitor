@@ -60,6 +60,6 @@ public class MonitorController {
 	
 	@RequestMapping(value="/app/add")
 	public void addService() {
-		logger.debug("AddService is invoked!");
+		logger.debug("add service is invoked!");
 	}
 }

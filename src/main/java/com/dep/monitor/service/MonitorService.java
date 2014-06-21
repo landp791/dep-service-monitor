@@ -2,8 +2,6 @@ package com.dep.monitor.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,7 +16,8 @@ import com.dep.monitor.util.HeadRequest;
 
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
-import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
 
 @org.springframework.stereotype.Service
@@ -91,7 +90,11 @@ public class MonitorService {
 			return mailInfo;
 		}
 		private void setType() {
-			mailInfo.setType(MAIL_TYPE_SPECIFIED);
+			if (APP_STATUS_GOOD == app.getStatus()) {
+				mailInfo.setType(MAIL_TYPE_SPECIFIED_GOOD);
+			} else {
+				mailInfo.setType(MAIL_TYPE_SPECIFIED_BAD);
+			}
 		}
 		
 		private void setUrl(){
@@ -103,7 +106,7 @@ public class MonitorService {
 		}
 		
 		private void setToMail(){
-			List<String> tomails = repository.queryTomailsByAppId(app.getAppId());
+			String[] tomails = repository.queryTomailsByAppId(app.getAppId());
 			mailInfo.setToMailAddrs(tomails);
 		}
 	}
@@ -144,7 +147,7 @@ public class MonitorService {
 		}
 		
 		private void setToMail() {
-			mailInfo.setToMailAddrs(Arrays.asList(DEP_MAIL_ADDR));
+			mailInfo.setToMailAddrs(new String[]{DEP_MAIL_ADDR});
 		}
 	}	
 	

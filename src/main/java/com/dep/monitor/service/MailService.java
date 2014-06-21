@@ -1,14 +1,13 @@
 package com.dep.monitor.service;
 
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
 import static java.lang.String.format;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
-import com.dep.monitor.model.App;
-import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.model.MailInfo;
 import com.google.common.collect.Maps;
 import com.sina.sae.mail.SaeMail;
@@ -48,48 +45,35 @@ public class MailService {
     @Resource(name = "velocityConfigurer")
     private VelocityConfigurer velocityConfigurer;
 
-    private void sendGoodNews(String url, List<AppOwner> appOwners) {
-        SaeMail mail = createSaeMailInstance(appOwners);
-        Map<String, Object> model = Maps.newHashMap();
-        model.put("url", url);
-        
-        sendMail("[Good News]Congratulations!Service work well now.", mail, model, GOOD_NEWS_TEMPLATE);
-        
-        logger.debug("send good news mail finish.");
+    private SaeMail createSaeMailInstance(String[] addrs) {
+        SaeMail mail = new SaeMail();
+        mail.setFrom(sendMail);
+        mail.setSmtpUsername(sendMail);
+        mail.setSmtpPassword(mailPassword);
+        mail.setSmtpHost(smtpHost);
+        mail.setSmtpPort(smtpPort);
+
+        mail.setTo(addrs);
+        mail.setContentType("HTML");
+        mail.setChartset(MAIL_ENCODING);
+        return mail;
     }
-    
-	private void sendBadNews(String url, List<AppOwner> appOwners){
-        SaeMail mail = createSaeMailInstance(appOwners);
-        Map<String, Object> model = Maps.newHashMap();
-        model.put("url", url);
 
-        sendMail("[部门服务监控]部门服务监控统计", mail, model, BAD_NEWS_TEMPLATE);
-
-        logger.debug("send bad news mail finish.");
+    /**
+     * 任何时候，只会发送一封邮件
+     * @param mailInfo
+     */
+	public void sendMail(MailInfo mailInfo) {
+		if (MAIL_TYPE_SPECIFIED_GOOD == mailInfo.getType() || MAIL_TYPE_SPECIFIED_BAD == mailInfo.getType()) {
+			SpecifiedServiceMailSender sender = new SpecifiedServiceMailSender(mailInfo);
+			sender.sendMail();
+		} else {
+			AllServiceMailSender sender = new AllServiceMailSender(mailInfo);
+			sender.sendMail();
+		}
 	}
-    
-    public void sendBadServicesMail(Set<App> apps, Set<App> badApps) {
-//        SaeMail mail = createSaeMailInstanceForBadServices(badServices);
-    	Set<String> allAppsUrls= parseUrls(apps);
-    	Set<String> badAppsUrls= parseUrls(badApps);
-    	
-    	
-        SaeMail mail = createSaeMailInstanceForBadServices(null);
-        
-        Map<String, Object> model = Maps.newHashMap();
-//        model.put("url", url);
-        
-
-        sendMail("[Bad News]Service goes on strike!Forget to pay salary?", mail, model, BAD_NEWS_TEMPLATE);
-
-        logger.debug("send bad news mail finish.");
-    }
-    
-    private Set<String> parseUrls(Set<App> apps) {
-    	return null;
-    }
 	
-    private void sendMail(String subject, SaeMail mail, Map<String, Object> model, String temple) {
+    private void doSend(String subject, SaeMail mail, Map<String, Object> model, String temple) {
         mail.setSubject(subject);
 
         String content = VelocityEngineUtils.mergeTemplateIntoString(        		
@@ -103,49 +87,54 @@ public class MailService {
         }
     }
     
-    private SaeMail createSaeMailInstanceForBadServices(List<AppOwner> appOwners) {
-        SaeMail mail = new SaeMail();
-        mail.setFrom(sendMail);
-        mail.setSmtpUsername(sendMail);
-        mail.setSmtpPassword(mailPassword);
-        mail.setSmtpHost(smtpHost);
-        mail.setSmtpPort(smtpPort);
-
-        mail.setTo(joinToMail(appOwners));
-        mail.setContentType("HTML");
-        mail.setChartset(MAIL_ENCODING);
-        return mail;
-    }
-	
-    private SaeMail createSaeMailInstance(List<AppOwner> appOwners) {
-        SaeMail mail = new SaeMail();
-        mail.setFrom(sendMail);
-        mail.setSmtpUsername(sendMail);
-        mail.setSmtpPassword(mailPassword);
-        mail.setSmtpHost(smtpHost);
-        mail.setSmtpPort(smtpPort);
-
-        mail.setTo(joinToMail(appOwners));
-        mail.setContentType("HTML");
-        mail.setChartset(MAIL_ENCODING);
-        return mail;
-    }
-    
-    private String[] joinToMail(List<AppOwner> appOwners) {
-    	String[] toMailArray = new String[appOwners.size()];
-    	for (AppOwner appOwner : appOwners) {
-    		ArrayUtils.add(toMailArray, "landongpingpub@163.com");
+    private class SpecifiedServiceMailSender{
+    	private MailInfo mailInfo;
+    	
+    	public SpecifiedServiceMailSender(MailInfo mailInfo) {
+    		this.mailInfo = mailInfo;
     	}
-    	return toMailArray;
+    	
+    	public void sendMail() {
+            SaeMail mail = createSaeMailInstance(this.mailInfo.getToMailAddrs());
+            Map<String, Object> model = Maps.newHashMap();
+            
+            String templateFile = null;
+            String subject = null;
+            if (MAIL_TYPE_SPECIFIED_GOOD.equals(mailInfo.getType())) {
+            	templateFile = GOOD_NEWS_TEMPLATE;
+            	subject = "[Good News]Congratulations!Service work well now.";
+            	model.put("url", mailInfo.getGoodUrls());
+            } else {
+            	templateFile = BAD_NEWS_TEMPLATE;
+            	subject = "[Bad News]Service goes on strike!Forget to pay salary?";
+            	model.put("url", mailInfo.getBadUrls());
+            }
+
+            doSend(subject, mail, model, templateFile);
+            logger.debug("send bad news mail finish.");
+    	}
     }
-
-    /**
-     * 任何时候，只会发送一封邮件
-     * @param mailInfo
-     */
-	public void sendMail(MailInfo mailInfo) {
-		
-	}
     
+    private class AllServiceMailSender{
+    	private MailInfo mailInfo;
+    	
+    	public AllServiceMailSender(MailInfo mailInfo) {
+    		this.mailInfo = mailInfo;
+    	}
+    	
+    	public void sendMail() {
+            SaeMail mail = createSaeMailInstance(this.mailInfo.getToMailAddrs());
+            Map<String, Object> model = Maps.newHashMap();
+            
+            String templateFile = null;
+            String subject = null;
+			templateFile = ALL_NEWS_TEMPLATE;
+			subject = "[部门服务监控]部门服务监控统计";
+			model.put("badUrls", mailInfo.getBadUrls());
+			model.put("goodUrls", mailInfo.getGoodUrls());
 
+            doSend(subject, mail, model, templateFile);
+            logger.debug("send all service news mail finish.");
+    	}
+    }    
 }

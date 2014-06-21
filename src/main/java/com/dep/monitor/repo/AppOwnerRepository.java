@@ -18,5 +18,5 @@ public interface AppOwnerRepository {
 	App[] queryAllApp();
 
 	@Query("select * ")
-	List<String> queryTomailsByAppId(String appId);
+	String[] queryTomailsByAppId(String appId);
 }

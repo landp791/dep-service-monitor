@@ -9,7 +9,7 @@ public class MailInfo {
 	
 	private List<String> badUrls;	
 	
-	private List<String> toMailAddrs;
+	private String[] toMailAddrs;
 	
 	private String content;
 	
@@ -61,11 +61,11 @@ public class MailInfo {
 		badUrls.add(url);
 	}
 
-	public List<String> getToMailAddrs() {
+	public String[] getToMailAddrs() {
 		return toMailAddrs;
 	}
 
-	public void setToMailAddrs(List<String> toMailAddrs) {
+	public void setToMailAddrs(String[] toMailAddrs) {
 		this.toMailAddrs = toMailAddrs;
 	}
 	

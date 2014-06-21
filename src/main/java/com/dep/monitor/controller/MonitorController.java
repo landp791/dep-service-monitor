@@ -1,13 +1,10 @@
 package com.dep.monitor.controller;
 
-import java.util.List;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,7 +37,7 @@ public class MonitorController {
 		}
 		
 		monitorService.monitorAndMarkResult(app);
-		MailInfo mailInfo = monitorService.translateToMailInfo(app);
+		MailInfo mailInfo = monitorService.prepareMailInfo(app);
 		mailService.sendMail(mailInfo);
 		logger.debug("Monitoring specified service finish." + url);
 	}
@@ -55,7 +52,7 @@ public class MonitorController {
 		}
 		
 		monitorService.monitorAndMarkResult(apps);
-		MailInfo mailInfo = monitorService.translateToMailInfo(apps);
+		MailInfo mailInfo = monitorService.prepareMailInfo(apps);
 		mailService.sendMail(mailInfo);
 		
 		logger.debug("Monitoring all services finish!");

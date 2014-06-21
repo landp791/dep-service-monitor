@@ -2,9 +2,8 @@ package com.dep.monitor.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,14 +15,17 @@ import com.dep.monitor.model.App;
 import com.dep.monitor.model.MailInfo;
 import com.dep.monitor.repo.AppOwnerRepository;
 import com.dep.monitor.util.HeadRequest;
-import com.mchange.v2.util.CollectionUtils;
 
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
 
 @org.springframework.stereotype.Service
 public class MonitorService {
 	private static final Log logger = LogFactory.getLog(MonitorController.class);
+	
+	private static final String DEP_MAIL_ADDR = "";
 
 	@Autowired
 	private HeadRequest head;
@@ -57,9 +59,93 @@ public class MonitorService {
 		}
 	}
 
-	public MailInfo translateToMailInfo(App... apps) {
+	public MailInfo prepareMailInfo(App... apps) {
+		if (apps != null && apps.length == 1) {
+			SpecifiedServiceMailInfoBuilder builder = new SpecifiedServiceMailInfoBuilder(apps[0]);
+			return builder.build();
+		} else {
+			AllServiceMailInfoBuilder builder = new AllServiceMailInfoBuilder(apps);
+			return builder.build();
+		}
+	}
+	
+	private class SpecifiedServiceMailInfoBuilder{
+		private App app;
+		private MailInfo mailInfo;
 		
-		return null;
+		public SpecifiedServiceMailInfoBuilder(App app) {
+			this.app = app;
+			mailInfo = new MailInfo();
+		}
+		
+		public MailInfo build() {
+			// set type
+			setType();
+			
+			// set Url
+			setUrl();
+			
+			// set tomail
+			setToMail();
+			
+			return mailInfo;
+		}
+		private void setType() {
+			mailInfo.setType(MAIL_TYPE_SPECIFIED);
+		}
+		
+		private void setUrl(){
+			if (APP_STATUS_GOOD == app.getStatus()) {
+				mailInfo.addGoodUrl(this.app.getAppUrl());
+			} else {
+				mailInfo.addBadUrl(this.app.getAppUrl());
+			}
+		}
+		
+		private void setToMail(){
+			List<String> tomails = repository.queryTomailsByAppId(app.getAppId());
+			mailInfo.setToMailAddrs(tomails);
+		}
 	}
 
+	private class AllServiceMailInfoBuilder{
+		private App[] apps;
+		private MailInfo mailInfo;
+		
+		public AllServiceMailInfoBuilder(App... apps) {
+			this.apps = apps;
+			mailInfo = new MailInfo();
+		}
+		
+		public MailInfo build() {
+			setType();
+			
+			// set Url
+			setUrl();
+			
+			// set tomail
+			setToMail();
+			
+			return mailInfo;
+		}
+		
+		private void setType() {
+			mailInfo.setType(MAIL_TYPE_ALL);
+		}
+		
+		private void setUrl() {
+			for (App app : apps) {
+				if (APP_STATUS_GOOD == app.getStatus()) {
+					mailInfo.addGoodUrl(app.getAppUrl());
+				} else {
+					mailInfo.addBadUrl(app.getAppUrl());
+				}
+			}
+		}
+		
+		private void setToMail() {
+			mailInfo.setToMailAddrs(Arrays.asList(DEP_MAIL_ADDR));
+		}
+	}	
+	
 }

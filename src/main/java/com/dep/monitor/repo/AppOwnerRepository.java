@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dep.monitor.model.App;
-import com.dep.monitor.model.AppOwner;
 
 @Repository
 public interface AppOwnerRepository {
@@ -17,4 +16,7 @@ public interface AppOwnerRepository {
 	
 	@Query("select * from app_email ae")
 	App[] queryAllApp();
+
+	@Query("select * ")
+	List<String> queryTomailsByAppId(String appId);
 }

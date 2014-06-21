@@ -139,6 +139,10 @@ public class MailService {
     	return toMailArray;
     }
 
+    /**
+     * 任何时候，只会发送一封邮件
+     * @param mailInfo
+     */
 	public void sendMail(MailInfo mailInfo) {
 		
 	}

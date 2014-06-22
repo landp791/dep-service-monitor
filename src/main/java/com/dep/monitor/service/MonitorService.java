@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.App;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.repo.AppOwnerRepository;
+import com.dep.monitor.repo.AppRepository;
 import com.dep.monitor.util.HeadRequest;
 
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
@@ -33,7 +33,7 @@ public class MonitorService {
 	private MailService mailService; 
 	
 	@Autowired
-	private AppOwnerRepository repository;
+	private AppRepository appRepository;
 	
 	public boolean monitor(String url) {
 		try {
@@ -106,7 +106,7 @@ public class MonitorService {
 		}
 		
 		private void setToMail(){
-			String[] tomails = repository.queryTomailsByAppId(app.getAppId());
+			String[] tomails = appRepository.queryTomailsByAppId(app.getAppId());
 			mailInfo.setToMailAddrs(tomails);
 		}
 	}

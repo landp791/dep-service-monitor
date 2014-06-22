@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dep.monitor.model.App;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.repo.AppOwnerRepository;
+import com.dep.monitor.repo.AppRepository;
 import com.dep.monitor.service.MailService;
 import com.dep.monitor.service.MonitorService;
 
@@ -25,12 +25,12 @@ public class MonitorController {
 	private MailService mailService;
 	
 	@Autowired
-	private AppOwnerRepository repository;
+	private AppRepository appRepository;
 
 	@RequestMapping(value="/service/monitor")
 	public void monitorSpecifiedService(@RequestParam("appUrl")String url) {
 		logger.debug("Monitoring specified service start." + url);
-		App app = repository.queryByUrl(url);
+		App app = appRepository.queryByUrl(url);
 		if (app == null) {
 			logger.warn("No config for the url!["+ url +"]");
 			return;
@@ -45,7 +45,7 @@ public class MonitorController {
 	@RequestMapping(value="/all/monitor")
 	public void monitorAllService(){
 		logger.debug("Monitoring all services start!");
-		App[] apps = repository.queryAllApp();
+		App[] apps = appRepository.queryAllApp();
 		if (ArrayUtils.isEmpty(apps)) {
 			logger.warn("No service configured for monitoring!");
 			return;

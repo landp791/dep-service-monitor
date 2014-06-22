@@ -2,6 +2,8 @@ package com.dep.monitor.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -9,7 +11,11 @@ import javax.persistence.UniqueConstraint;
 @Entity(name = "owner")
 @Table(name = "owner", uniqueConstraints = @UniqueConstraint(columnNames = {"umAccount"}))
 public class Owner {
-    @Id
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	
+    @Basic
 	private String umAccount;
     
     @Basic

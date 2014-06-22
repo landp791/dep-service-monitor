@@ -6,15 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Id;
 
-import org.springframework.data.annotation.Id;
 
-@Entity(name = "app")
-@Table(name = "app", uniqueConstraints = @UniqueConstraint(columnNames = {"appId"}))
+@Entity(name = "service")
+@Table(name = "service", uniqueConstraints = @UniqueConstraint(columnNames = {"appUrl"}))
 public class App {
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private String appId;
+    private Long appId; 
 	
     @Basic
 	private String appName;
@@ -24,17 +24,23 @@ public class App {
     
     private int status;
     
-    public int getStatus() {
+    public App() {
+    	
+    }
+    
+    public Long getAppId() {
+		return appId;
+	}
+
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
+
+	public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
 		this.status = status;
-	}
-	public String getAppId() {
-		return appId;
-	}
-	public void setAppId(String appId) {
-		this.appId = appId;
 	}
 	public String getAppName() {
 		return appName;

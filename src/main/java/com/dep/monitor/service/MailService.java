@@ -60,7 +60,7 @@ public class MailService {
     }
 
     /**
-     * 任何时候，只会发送一封邮件
+     * Anyway, only one mail would be sent.
      * @param mailInfo
      */
 	public void sendMail(MailInfo mailInfo) {
@@ -103,11 +103,11 @@ public class MailService {
             if (MAIL_TYPE_SPECIFIED_GOOD.equals(mailInfo.getType())) {
             	templateFile = GOOD_NEWS_TEMPLATE;
             	subject = "[Good News]Congratulations!Service work well now.";
-            	model.put("url", mailInfo.getGoodUrls());
+            	model.put("url", mailInfo.getGoodUrls().get(0));
             } else {
             	templateFile = BAD_NEWS_TEMPLATE;
             	subject = "[Bad News]Service goes on strike!Forget to pay salary?";
-            	model.put("url", mailInfo.getBadUrls());
+            	model.put("url", mailInfo.getBadUrls().get(0));
             }
 
             doSend(subject, mail, model, templateFile);

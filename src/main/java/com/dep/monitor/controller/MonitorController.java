@@ -1,6 +1,7 @@
 package com.dep.monitor.controller;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dep.monitor.model.App;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.repo.AppRepository;
+import com.dep.monitor.repo.read.AppReadRepository;
 import com.dep.monitor.service.MailService;
 import com.dep.monitor.service.MonitorService;
 
@@ -25,11 +26,11 @@ public class MonitorController {
 	private MailService mailService;
 	
 	@Autowired
-	private AppRepository appRepository;
+	private AppReadRepository appRepository;
 
 	@RequestMapping(value="/service/monitor")
 	public void monitorSpecifiedService(@RequestParam("appUrl")String url) {
-		logger.debug("Monitoring specified service start." + url);
+		logger.warn("Monitoring specified service start." + url);
 		App app = appRepository.queryByUrl(url);
 		if (app == null) {
 			logger.warn("No config for the url!["+ url +"]");
@@ -58,8 +59,17 @@ public class MonitorController {
 		logger.debug("Monitoring all services finish!");
 	}
 	
-	@RequestMapping(value="/app/add")
-	public void addService() {
+	@RequestMapping(value="/service/add")
+	public void addService(@RequestParam("appUrl") String url,
+			@RequestParam("appName") String appName,
+			@RequestParam("owners") String ownersStr) {
 		logger.debug("add service is invoked!");
+		String[] owners = StringUtils.split(ownersStr, ",");
+		if (ArrayUtils.isEmpty(owners) || StringUtils.isEmpty(url)) {
+			logger.warn("Sevice added is not valid![" + url +"|" + ownersStr +"]");
+			return;
+		}
+		
+		monitorService.saveAppMonitored(url, appName, owners);
 	}
 }

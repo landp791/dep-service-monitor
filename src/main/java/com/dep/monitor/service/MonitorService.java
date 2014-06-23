@@ -1,7 +1,15 @@
 package com.dep.monitor.service;
 
+import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
+import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
+import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,15 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.App;
+import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.repo.AppRepository;
+import com.dep.monitor.repo.read.AppReadRepository;
+import com.dep.monitor.repo.write.AppOwnerWriteRepository;
+import com.dep.monitor.repo.write.AppWriteRepository;
 import com.dep.monitor.util.HeadRequest;
-
-import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
-import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
-import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
-import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
-import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
 
 @org.springframework.stereotype.Service
 public class MonitorService {
@@ -33,7 +38,13 @@ public class MonitorService {
 	private MailService mailService; 
 	
 	@Autowired
-	private AppRepository appRepository;
+	private AppReadRepository appReadRepository;
+	
+	@Autowired
+	private AppWriteRepository appWriteRepository;
+	
+	@Autowired
+	private AppOwnerWriteRepository appOwnerWriteRepository;
 	
 	public boolean monitor(String url) {
 		try {
@@ -106,7 +117,7 @@ public class MonitorService {
 		}
 		
 		private void setToMail(){
-			String[] tomails = appRepository.queryTomailsByAppId(app.getAppId());
+			String[] tomails = appReadRepository.queryTomailsByAppId(app.getId());
 			mailInfo.setToMailAddrs(tomails);
 		}
 	}
@@ -149,6 +160,19 @@ public class MonitorService {
 		private void setToMail() {
 			mailInfo.setToMailAddrs(new String[]{DEP_MAIL_ADDR});
 		}
+	}
+
+	// should in transaction
+	public void saveAppMonitored(String url, String appName, String[] owners) {
+		App app = new App(url, appName);
+		App appSaved = appWriteRepository.save(app);
+		
+		Set<AppOwner> set = new HashSet<AppOwner>();
+		for (String owner: owners) {
+			AppOwner ao = new AppOwner(appSaved.getId(), owner);
+			set.add(ao);
+		}
+		appOwnerWriteRepository.save(set);
 	}	
 	
 }

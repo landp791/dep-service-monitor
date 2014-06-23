@@ -21,6 +21,15 @@ public class AppOwner {
 	@Basic
 	private String umAccount;
 	
+	public AppOwner() {
+		
+	}
+	
+	public AppOwner(long appId, String umAccount) {
+		this.appId = appId;
+		this.umAccount = umAccount;
+	}
+	
 	public long getId() {
 		return id;
 	}

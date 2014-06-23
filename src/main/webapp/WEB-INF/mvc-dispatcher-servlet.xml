@@ -26,12 +26,8 @@
         <property name="resourceLoaderPath" value="WEB-INF/velocity" />
         <property name="velocityProperties">
             <props>
-                <prop key="directive.foreach.counter.name">
-                    loopCounter
-                </prop>
-                <prop key="directive.foreach.counter.initial.value">
-                    0
-                </prop>
+                <prop key="directive.foreach.counter.name">loopCounter</prop>
+                <prop key="directive.foreach.counter.initial.value">0</prop>
                 <prop key="input.encoding">UTF-8</prop>
                 <prop key="output.encoding">UTF-8</prop>
             </props>
@@ -47,22 +43,11 @@
         </property>
     </bean>
 
-    <!--write persistence config-->
+    <!--write persistence config -->
     <bean id="writeJpaVendor"
           class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="showSql" value="true"/>
         <property name="generateDdl" value="true"/>
-    </bean>
-
-    <bean id="writeDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource " destroy-method="close">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/depmonitor"/>
-        <property name="acquireIncrement" value="1"/>
-        <property name="initialPoolSize" value="5"/>
-        <property name="maxPoolSize" value="20"/>
-        <property name="minPoolSize" value="5"/>
-        <property name="maxStatements" value="100"/>
-        <property name="testConnectionOnCheckout" value="true"/>
     </bean>
 
     <bean id="writeEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -90,17 +75,18 @@
                       transaction-manager-ref="writeTransactionManager" />
 
     <tx:annotation-driven transaction-manager="writeTransactionManager"/>
+    
 
-    <!--write persistence config-->
+    <!--Read persistence config-->
     <bean id="readJpaVendor"
           class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="showSql" value="true"/>
         <property name="generateDdl" value="true"/>
     </bean>
 
-    <bean id="readDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource " destroy-method="close">
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/depmonitor"/>
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/depmonitor"/>
         <property name="user" value="root"/>
         <property name="password" value="root"/>
         <property name="acquireIncrement" value="1"/>
@@ -110,8 +96,9 @@
         <property name="maxStatements" value="100"/>
         <property name="testConnectionOnCheckout" value="true"/>
     </bean>
-
+    
     <bean id="readEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    	<property name="dataSource" ref="dataSource"/>
         <property name="persistenceUnitManager" ref="persistenceUnitManager" />
         <property name="persistenceUnitName" value="queryPersistenceUnit"/>
         <property name="jpaVendorAdapter" ref="readJpaVendor" />
@@ -131,7 +118,7 @@
         </property>
     </bean>
 
-    <jpa:repositories base-package="com.github.dba.repo.read"
+    <jpa:repositories base-package="com.dep.monitor.repo"
                       entity-manager-factory-ref="readEntityManagerFactory"
                       transaction-manager-ref="readTransactionManager" />
 

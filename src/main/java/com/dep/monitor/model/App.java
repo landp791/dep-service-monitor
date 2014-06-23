@@ -9,12 +9,12 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Id;
 
 
-@Entity(name = "service")
-@Table(name = "service", uniqueConstraints = @UniqueConstraint(columnNames = {"appUrl"}))
+@Entity(name = "app")
+@Table(name = "app", uniqueConstraints = @UniqueConstraint(columnNames = {"appUrl"}))
 public class App {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long appId; 
+    private Long id; 
 	
     @Basic
 	private String appName;
@@ -28,12 +28,17 @@ public class App {
     	
     }
     
-    public Long getAppId() {
-		return appId;
+    public App(String appUrl, String appName) {
+    	this.appUrl = appUrl;
+    	this.appName = appName;
+    }
+    
+	public Long getId() {
+		return id;
 	}
 
-	public void setAppId(Long appId) {
-		this.appId = appId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public int getStatus() {

@@ -3,39 +3,21 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
              http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+             
     <persistence-unit name="mainPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <non-jta-data-source>writeDataSource</non-jta-data-source>
+        <non-jta-data-source>dataSource</non-jta-data-source>
         <class>com.dep.monitor.model.Owner</class>
         <class>com.dep.monitor.model.App</class>
         <class>com.dep.monitor.model.AppOwner</class>
-        <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/depmontor" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="root" />
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
-            <property name="hibernate.show_sql" value="true" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
-        </properties>
     </persistence-unit>
 
     <persistence-unit name="queryPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <non-jta-data-source>readDataSource</non-jta-data-source>
+        <non-jta-data-source>dataSource</non-jta-data-source>
         <class>com.dep.monitor.model.Owner</class>
         <class>com.dep.monitor.model.App</class>
         <class>com.dep.monitor.model.AppOwner</class>
-        <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/depmontor" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="root" />
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
-            <property name="hibernate.show_sql" value="true" />
-        </properties>
     </persistence-unit>
 
 </persistence>

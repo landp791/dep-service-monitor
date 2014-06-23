@@ -98,6 +98,9 @@ public class MonitorService {
 			// set tomail
 			setToMail();
 			
+			// set app name
+			addAppName();
+			
 			return mailInfo;
 		}
 		private void setType() {
@@ -119,6 +122,10 @@ public class MonitorService {
 		private void setToMail(){
 			String[] tomails = appReadRepository.queryTomailsByAppId(app.getId());
 			mailInfo.setToMailAddrs(tomails);
+		}
+		
+		private void addAppName() {
+			mailInfo.setAppName(app.getAppUrl(),app.getAppName());
 		}
 	}
 

@@ -4,4 +4,15 @@
 
 <h4>详情如下：</h4>
 <br/>
+<h4>正常服务：</h4>
+#foreach( $goodUrl in $goodUrls )
+<h4><a href="$goodUrl" target="_blank">$appNames.get($goodUrl)</a></h4>
+#end
+
+<br/>
+<br/>
+<h4>异常服务：</h4>
 <h4><a href="$service.url" target="_blank">服务地址</a></h4>
+#foreach( $badUrl in $badUrls )
+<h4><a href="$badUrl" target="_blank">$appNames.get($badUrl)</a></h4>
+#end

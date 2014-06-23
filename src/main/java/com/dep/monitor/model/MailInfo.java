@@ -2,6 +2,7 @@ package com.dep.monitor.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MailInfo {
 
@@ -11,7 +12,7 @@ public class MailInfo {
 	
 	private String[] toMailAddrs;
 	
-	private String content;
+	private Map<String, String> appNames;
 	
 	private String type;
 	
@@ -39,12 +40,12 @@ public class MailInfo {
 		this.type = type;
 	}
 
-	public String getContent() {
-		return content;
+	public Map<String, String> getAppNames() {
+		return appNames;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setAppName(String appUrl, String appName) {
+		this.appNames.put(appUrl, appName);
 	}
 
 	public void addGoodUrl(String url) {

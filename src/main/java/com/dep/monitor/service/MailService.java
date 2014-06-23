@@ -104,10 +104,12 @@ public class MailService {
             	templateFile = GOOD_NEWS_TEMPLATE;
             	subject = "[Good News]Congratulations!Service work well now.";
             	model.put("url", mailInfo.getGoodUrls().get(0));
+            	model.put("appNames", mailInfo.getAppNames());
             } else {
             	templateFile = BAD_NEWS_TEMPLATE;
             	subject = "[Bad News]Service goes on strike!Forget to pay salary?";
             	model.put("url", mailInfo.getBadUrls().get(0));
+            	model.put("appNames", mailInfo.getAppNames());
             }
 
             doSend(subject, mail, model, templateFile);
@@ -132,6 +134,7 @@ public class MailService {
 			subject = "[部门服务监控]部门服务监控统计";
 			model.put("badUrls", mailInfo.getBadUrls());
 			model.put("goodUrls", mailInfo.getGoodUrls());
+			
 
             doSend(subject, mail, model, templateFile);
             logger.debug("send all service news mail finish.");

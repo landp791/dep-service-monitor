@@ -59,17 +59,4 @@ public class MonitorController {
 		logger.debug("Monitoring all services finish!");
 	}
 	
-	@RequestMapping(value="/service/add")
-	public void addService(@RequestParam("appUrl") String url,
-			@RequestParam("appName") String appName,
-			@RequestParam("owners") String ownersStr) {
-		logger.debug("add service is invoked!");
-		String[] owners = StringUtils.split(ownersStr, ",");
-		if (ArrayUtils.isEmpty(owners) || StringUtils.isEmpty(url)) {
-			logger.warn("Sevice added is not valid![" + url +"|" + ownersStr +"]");
-			return;
-		}
-		
-		monitorService.saveAppMonitored(url, appName, owners);
-	}
 }

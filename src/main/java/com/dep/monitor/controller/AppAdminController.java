@@ -1,5 +1,7 @@
 package com.dep.monitor.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -9,8 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.dep.monitor.model.AllAppOwners;
 import com.dep.monitor.model.App;
+import com.dep.monitor.model.AppOwner;
+import com.dep.monitor.model.Owner;
+import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.repo.read.AppReadRepository;
+import com.dep.monitor.repo.read.OwnerReadRepository;
 import com.dep.monitor.service.MonitorService;
 
 @Controller
@@ -20,7 +27,14 @@ public class AppAdminController {
 	@Autowired
 	private MonitorService monitorService;
 	
+	@Autowired
 	private AppReadRepository appRepo;
+	
+	@Autowired
+	private AppOwnerReadRepository appOwnerRepo;
+	
+	@Autowired
+	private OwnerReadRepository ownerRepo;
 	
 	@RequestMapping(value="/service/add")
 	public void addService(@RequestParam("appUrl") String url,
@@ -38,17 +52,12 @@ public class AppAdminController {
 	
 	@RequestMapping(value="/all/query")
 	public String queryAllApp() {
-		App[] apps = appRepo.queryAllApp();
-		if (apps == null) {
-			return "";
-		} 
-		for (App app : apps) {
-			long appId = app.getId();
-			
-		}
-		
-		
-		return null;
+		List<App> apps = appRepo.findAll();
+		List<AppOwner> appOwners = appOwnerRepo.findAll();
+		List<Owner> owners = ownerRepo.findAll();
+//		AllAppOwners all = new AllAppOwners(apps, appOwners, owners);
+//		return all.buildJson();
+		return "";
 	}
 	
 	@RequestMapping(value="/service/update")

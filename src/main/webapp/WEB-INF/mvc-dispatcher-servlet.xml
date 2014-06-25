@@ -123,4 +123,5 @@
                       transaction-manager-ref="readTransactionManager" />
 
     <tx:annotation-driven transaction-manager="readTransactionManager"/>
+    
 </beans>

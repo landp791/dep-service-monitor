@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.dep.monitor.model.AppOwner;
+import com.dep.monitor.model.App;
+import com.dep.monitor.model.Owner;
 
-public interface AppOwnerReadRepository extends JpaRepository<AppOwner, Long>, JpaSpecificationExecutor<AppOwner> {
+public interface OwnerReadRepository extends JpaRepository<Owner, Long>, JpaSpecificationExecutor<Owner> {
 
-	@Query("select ao from appOwner ao where ao.id = :appId")
-	AppOwner queryByAppId(@Param("appId") String appId);
+	@Query("select a from owner o where a.appUrl = :id")
+	App queryById(@Param("id") String ownerId);
 	
 }

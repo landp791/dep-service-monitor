@@ -1,7 +1,5 @@
 package com.dep.monitor.model;
 
-import java.util.List;
-
 public class AppOwnerView {
 	
 	private String appName;
@@ -32,10 +30,6 @@ public class AppOwnerView {
 
 	public void setToMail(String toMail) {
 		this.toMail = toMail;
-	}
-
-	public void setTomail(List<Owner> owners) {
-		
 	}
 }
 

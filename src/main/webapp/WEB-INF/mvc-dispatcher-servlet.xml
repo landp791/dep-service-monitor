@@ -86,7 +86,7 @@
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://10.20.10.169:3306/depmonitor"/>
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/depmonitor"/>
         <property name="user" value="root"/>
         <property name="password" value="root"/>
         <property name="acquireIncrement" value="1"/>

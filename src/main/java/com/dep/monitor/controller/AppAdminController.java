@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dep.monitor.model.AppOwner;
-import com.dep.monitor.repo.read.AppOwnerDTOReadRepository;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.util.StringUtil;
 
@@ -21,21 +20,19 @@ public class AppAdminController {
 	@Autowired
 	private AppOwnerReadRepository appOwnerRepo;
 	
-	@Autowired
-	private AppOwnerDTOReadRepository appOwnerDTORepo;
-	
 	@RequestMapping(value="/service/add")
 	public void addService(@RequestParam("appUrl") String appUrl,
 			@RequestParam("appName") String appName,
 			@RequestParam("owner") String owner) {
 		logger.debug("add service is invoked!");
-		AppOwner appOwnerDto = new AppOwner(appName, appUrl, owner); 
-		appOwnerDTORepo.save(appOwnerDto);
+		AppOwner appOwner = new AppOwner(appName, appUrl, owner); 
+		appOwnerRepo.save(appOwner);
 	}
 	
 	@RequestMapping(value="/all/query")
 	public String queryAllApp() {
-		List<AppOwner> apps = appOwnerDTORepo.findAll();
+		logger.debug("query all service is invoked!");
+		List<AppOwner> apps = appOwnerRepo.findAll();
 		return StringUtil.toJson(apps);
 	}
 	
@@ -44,18 +41,19 @@ public class AppAdminController {
 			@RequestParam("appName")String appName,
 			@RequestParam("appUrl")String appUrl,
 			@RequestParam("owner")String owner) {
-		
+		logger.debug("update service is invoked!");
 		Long idLong = Long.valueOf(id);
-		appOwnerDTORepo.findOne(idLong);
+		appOwnerRepo.findOne(idLong);
 		AppOwner appOwnerDto = new AppOwner(appName, appUrl, owner); 
-		appOwnerDTORepo.save(appOwnerDto);
+		appOwnerRepo.save(appOwnerDto);
 		return null;
 	}
 	
 	@RequestMapping(value="/service/delete")
 	public String deleteService(@RequestParam("id")String id) {
+		logger.debug("update service is invoked!");
 		Long idLong = Long.valueOf(id);
-		appOwnerDTORepo.delete(idLong);
+		appOwnerRepo.delete(idLong);
 		return null;
 	}	
 	

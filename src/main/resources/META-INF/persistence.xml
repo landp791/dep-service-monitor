@@ -7,16 +7,12 @@
     <persistence-unit name="mainPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>dataSource</non-jta-data-source>
-        <class>com.dep.monitor.model.Owner</class>
-        <class>com.dep.monitor.model.App</class>
         <class>com.dep.monitor.model.AppOwner</class>
     </persistence-unit>
 
     <persistence-unit name="queryPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>dataSource</non-jta-data-source>
-        <class>com.dep.monitor.model.Owner</class>
-        <class>com.dep.monitor.model.App</class>
         <class>com.dep.monitor.model.AppOwner</class>
     </persistence-unit>
 

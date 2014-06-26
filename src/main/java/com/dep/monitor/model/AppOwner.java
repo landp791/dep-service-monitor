@@ -24,11 +24,24 @@ public class AppOwner {
 	@Basic
 	private String owner;
 	
+	private int status;
+	
+	public AppOwner(){
+		
+	}
+	
 	public AppOwner(String appName, String appUrl, String owner) {
-		this.id = id;
 		this.appName = appName;
 		this.appUrl = appUrl;
 		this.owner = owner;
+	}
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public Long getId() {

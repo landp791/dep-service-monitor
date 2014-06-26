@@ -17,12 +17,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dep.monitor.controller.MonitorController;
-import com.dep.monitor.model.App;
-import com.dep.monitor.model.AppOwnerDep;
+import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.repo.read.AppReadRepository;
-import com.dep.monitor.repo.write.AppOwnerWriteRepository;
-import com.dep.monitor.repo.write.AppWriteRepository;
+import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.util.HeadRequest;
 
 @org.springframework.stereotype.Service
@@ -38,13 +35,7 @@ public class MonitorService {
 	private MailService mailService; 
 	
 	@Autowired
-	private AppReadRepository appReadRepository;
-	
-	@Autowired
-	private AppWriteRepository appWriteRepository;
-	
-	@Autowired
-	private AppOwnerWriteRepository appOwnerWriteRepository;
+	private AppOwnerReadRepository appOwnerReadRepo;
 	
 	public boolean monitor(String url) {
 		try {
@@ -59,8 +50,8 @@ public class MonitorService {
 		return false;
 	}
 
-	public void monitorAndMarkResult(App... apps) {
-		for (App app : apps) {
+	public void monitorAndMarkResult(AppOwner... apps) {
+		for (AppOwner app : apps) {
 			if (monitor(app.getAppUrl())) {
 				app.setStatus(APP_STATUS_GOOD);
 			} else {
@@ -69,7 +60,7 @@ public class MonitorService {
 		}
 	}
 
-	public MailInfo prepareMailInfo(App... apps) {
+	public MailInfo prepareMailInfo(AppOwner... apps) {
 		if (apps != null && apps.length == 1) {
 			SpecifiedServiceMailInfoBuilder builder = new SpecifiedServiceMailInfoBuilder(apps[0]);
 			return builder.build();
@@ -80,10 +71,10 @@ public class MonitorService {
 	}
 	
 	private class SpecifiedServiceMailInfoBuilder{
-		private App app;
+		private AppOwner app;
 		private MailInfo mailInfo;
 		
-		public SpecifiedServiceMailInfoBuilder(App app) {
+		public SpecifiedServiceMailInfoBuilder(AppOwner app) {
 			this.app = app;
 			mailInfo = new MailInfo();
 		}
@@ -120,7 +111,8 @@ public class MonitorService {
 		}
 		
 		private void setToMail(){
-			String[] tomails = appReadRepository.queryTomailsByAppId(app.getId());
+			String ownerStr = app.getOwner();
+			String[] tomails = ownerStr.split(",");
 			mailInfo.setToMailAddrs(tomails);
 		}
 		
@@ -130,10 +122,10 @@ public class MonitorService {
 	}
 
 	private class AllServiceMailInfoBuilder{
-		private App[] apps;
+		private AppOwner[] apps;
 		private MailInfo mailInfo;
 		
-		public AllServiceMailInfoBuilder(App... apps) {
+		public AllServiceMailInfoBuilder(AppOwner... apps) {
 			this.apps = apps;
 			mailInfo = new MailInfo();
 		}
@@ -155,7 +147,7 @@ public class MonitorService {
 		}
 		
 		private void setUrl() {
-			for (App app : apps) {
+			for (AppOwner app : apps) {
 				if (APP_STATUS_GOOD == app.getStatus()) {
 					mailInfo.addGoodUrl(app.getAppUrl());
 				} else {
@@ -169,17 +161,17 @@ public class MonitorService {
 		}
 	}
 
-	// should in transaction
-	public void saveAppMonitored(String url, String appName, String[] owners) {
-		App app = new App(url, appName);
-		App appSaved = appWriteRepository.save(app);
-		
-		Set<AppOwnerDep> set = new HashSet<AppOwnerDep>();
-		for (String owner: owners) {
-			AppOwnerDep ao = new AppOwnerDep(appSaved.getId(), owner);
-			set.add(ao);
-		}
-		appOwnerWriteRepository.save(set);
-	}	
+//	// should in transaction
+//	public void saveAppMonitored(String url, String appName, String[] owners) {
+//		App app = new App(url, appName);
+//		App appSaved = appWriteRepository.save(app);
+//		
+//		Set<AppOwnerDep> set = new HashSet<AppOwnerDep>();
+//		for (String owner: owners) {
+//			AppOwnerDep ao = new AppOwnerDep(appSaved.getId(), owner);
+//			set.add(ao);
+//		}
+//		appOwnerWriteRepository.save(set);
+//	}	
 	
 }

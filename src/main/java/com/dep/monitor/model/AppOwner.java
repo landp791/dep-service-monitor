@@ -5,49 +5,63 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity(name = "appOwner")
-@Table(name = "appOwner", uniqueConstraints = @UniqueConstraint(columnNames = {"appId", "umAccount"}))
+@Table(name = "app_owner", uniqueConstraints = @UniqueConstraint(columnNames = {"appUrl"}))
 public class AppOwner {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+	@Basic
+	private String appName;
 	
 	@Basic
-	private long appId;
+	private String appUrl;
 	
 	@Basic
-	private String umAccount;
+	private String owner;
 	
-	public AppOwner() {
-		
+	public AppOwner(String appName, String appUrl, String owner) {
+		this.id = id;
+		this.appName = appName;
+		this.appUrl = appUrl;
+		this.owner = owner;
 	}
-	
-	public AppOwner(long appId, String umAccount) {
-		this.appId = appId;
-		this.umAccount = umAccount;
-	}
-	
-	public long getId() {
+
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	public long getAppId() {
-		return appId;
+
+	public String getAppName() {
+		return appName;
 	}
-	public void setAppId(long appId) {
-		this.appId = appId;
+
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
-	public String getUmAccount() {
-		return umAccount;
+
+	public String getAppUrl() {
+		return appUrl;
 	}
-	public void setUmAccount(String umAccount) {
-		this.umAccount = umAccount;
+
+	public void setAppUrl(String appUrl) {
+		this.appUrl = appUrl;
 	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+	
 	
 }

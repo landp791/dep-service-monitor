@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.App;
-import com.dep.monitor.model.AppOwner;
+import com.dep.monitor.model.AppOwnerDep;
 import com.dep.monitor.model.MailInfo;
 import com.dep.monitor.repo.read.AppReadRepository;
 import com.dep.monitor.repo.write.AppOwnerWriteRepository;
@@ -174,9 +174,9 @@ public class MonitorService {
 		App app = new App(url, appName);
 		App appSaved = appWriteRepository.save(app);
 		
-		Set<AppOwner> set = new HashSet<AppOwner>();
+		Set<AppOwnerDep> set = new HashSet<AppOwnerDep>();
 		for (String owner: owners) {
-			AppOwner ao = new AppOwner(appSaved.getId(), owner);
+			AppOwnerDep ao = new AppOwnerDep(appSaved.getId(), owner);
 			set.add(ao);
 		}
 		appOwnerWriteRepository.save(set);

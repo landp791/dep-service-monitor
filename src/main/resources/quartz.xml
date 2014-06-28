@@ -24,8 +24,12 @@
 	<bean id="cornTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="jobDetail" />
-		<!-- 每个10秒触发 -->
+		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
+		<!-- 每隔10秒触发 -->
 		<property name="cronExpression" value="0/10 * * * * ?" />
+		<!-- 
+		<property name="cronExpression" value="0/10 * * * * ?" />
+		 -->
 	</bean>
 
 	<!-- 定义核心调度器 -->
@@ -36,8 +40,4 @@
 		</property>
 	</bean>
 
-	<bean id="quartzJobBean"
-		class="org.springframework.scheduling.quartz.QuartzJobBean">
-	</bean>
- 
 </beans>

@@ -9,6 +9,10 @@
         http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+    
+    <import resource="classpath*:quartz.xml"/>
+    <context:property-override/>  
+    
     <context:component-scan base-package="com.dep.monitor"/>
 
     <context:property-placeholder location="WEB-INF/config/app.properties"/>

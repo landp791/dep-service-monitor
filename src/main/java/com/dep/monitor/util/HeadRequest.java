@@ -25,6 +25,7 @@ public class HeadRequest {
 	@PostConstruct
 	public void onInit() {
 		httpClient = new DefaultHttpClient();
+		head = new HttpHead();
 	}
 	
 	@PreDestroy

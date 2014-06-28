@@ -13,16 +13,16 @@
     <h2>部门服务监控管理</h2>
     <p>Click the buttons on datagrid toolbar to do crud actions.</p>
     
-    <table id="dg" title="My Users" class="easyui-datagrid" style="width:1000px;height:500px"
-            url="all/query"
+    <table id="dg" title="All services" class="easyui-datagrid" style="width:1000px;height:500px"
+            url="api/all/query"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                <th field="firstname" width="150">Service Name</th>
-                <th field="lastname" width="150">Health check url</th>
-                <th field="phone" width="250">Owners</th>
-                <th field="email" width="150">Remark</th>
+            	<th field="id" width="150">Id</th>
+                <th field="appName" width="150">Service Name</th>
+                <th field="appUrl" width="150">Health check url</th>
+                <th field="owner" width="250">Owners</th>
             </tr>
         </thead>
     </table>
@@ -32,26 +32,36 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyService()">Remove Service</a>
     </div>
     
-    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+    <div id="dlg" class="easyui-dialog" style="width:600px;height:380px;padding:10px 20px"
             closed="true" buttons="#dlg-buttons">
         <div class="ftitle">Service Information</div>
-        <form id="fm" method="post" novalidate>
-            <div class="fitem">
-                <label>Service Name:</label>
-                <input name="servicename" class="easyui-validatebox" required="true">
-            </div>
-            <div class="fitem">
-                <label>Service Url:</label>
-                <input name="serviceurl" class="easyui-validatebox" required="true">
-            </div>
-            <div class="fitem">
-                <label>Mail to:</label>
-                <input name="tomail">
-            </div>
-            <div class="fitem">
-                <label>Remark:</label>
-                <input name="remark" class="easyui-validatebox" validType="email">
-            </div>
+        <form id="fm" method="post">
+            <table cellpadding="3">
+         	    <tr>
+                    <td>Service Name:</td>
+                    <td>
+                    	<div class="fitem"><input name="appName" class="easyui-validatebox" required="true"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Service Url:</td>
+                    <td>
+                    	<div class="fitem"><input name="appUrl" class="easyui-validatebox" required="true"></div>
+					</td>
+                    
+                </tr>
+                <tr>
+                    <td>Owners:</td>
+                    <td>
+                    	<div class="fitem">
+                    		<!-- style="width: 240px; height: 100px" -->
+							<input name="owner" class="easyui-validatebox textarea"
+								rows="50" cols="120" required="true">
+						</div>
+					</td>
+                </tr>
+            </table>
+         
         </form>
     </div>
     <div id="dlg-buttons">
@@ -63,14 +73,14 @@
         function newService(){
             $('#dlg').dialog('open').dialog('setTitle','New Service');
             $('#fm').form('clear');
-            url = '/service/add';
+            url = 'api/service/add';
         }
         function editService(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $('#dlg').dialog('open').dialog('setTitle','Edit User');
+                $('#dlg').dialog('open').dialog('setTitle','Edit Service Information');
                 $('#fm').form('load',row);
-                url = '/service/update?id='+row.id;
+                url = 'api/service/update?id='+row.id;
             }
         }
         function saveService(){
@@ -88,7 +98,7 @@
                         });
                     } else {
                         $('#dlg').dialog('close');        // close the dialog
-                        $('#dg').datagrid('reload');    // reload the user data
+                        $('#dg').datagrid('reload');    // reload the service data
                     }
                 }
             });
@@ -98,9 +108,9 @@
             if (row){
                 $.messager.confirm('Confirm','Are you sure you want to delete this service?',function(r){
                     if (r){
-                        $.post('/api/service/delete',{id:row.id},function(result){
+                        $.post('api/service/delete',{id:row.id},function(result){
                             if (result.success){
-                                $('#dg').datagrid('reload');    // reload the user data
+                                $('#dg').datagrid('reload');    // reload the service data
                             } else {
                                 $.messager.show({    // show error message
                                     title: 'Error',

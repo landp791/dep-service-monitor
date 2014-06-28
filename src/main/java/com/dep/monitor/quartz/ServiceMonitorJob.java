@@ -23,6 +23,7 @@ public class ServiceMonitorJob extends QuartzJobBean{
 	@Override
 	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
 		try {
+			logger.info("aaaaaaaaaaaa quartz runs once!!");
 			if (head.withUrl(url).isOK()) {
 				logger.info("Request all service monitoring successrully.");
 			}

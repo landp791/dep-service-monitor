@@ -1,15 +1,22 @@
 package com.dep.monitor.controller;
 
+import static java.lang.String.format;
+
+import java.io.IOException;
 import java.util.List;
 
 import net.sf.json.JSONArray;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
@@ -21,6 +28,8 @@ public class AppAdminController {
 	@Autowired
 	private AppOwnerReadRepository appOwnerRepo;
 	
+	private final ObjectMapper mapper = new ObjectMapper();
+	
 	@RequestMapping(value="/service/add")
 	public void addService(@RequestParam("appUrl") String appUrl,
 			@RequestParam("appName") String appName,
@@ -31,10 +40,12 @@ public class AppAdminController {
 	}
 	
 	@RequestMapping(value="/all/query")
-	public String queryAllApp() {
+	@ResponseBody
+	public Object queryAllApp() throws JsonGenerationException, JsonMappingException, IOException {
 		logger.debug("query all service is invoked!");
 		List<AppOwner> apps = appOwnerRepo.findAll();
-		return JSONArray.fromObject(apps).toString();
+		logger.debug(format("size of apps: %s", apps.size()));
+		return apps;
 	}
 	
 	@RequestMapping(value="/service/update")

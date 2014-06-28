@@ -2,6 +2,8 @@ package com.dep.monitor.controller;
 
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
-import com.dep.monitor.util.StringUtil;
 
 @Controller
 public class AppAdminController {
@@ -33,28 +34,29 @@ public class AppAdminController {
 	public String queryAllApp() {
 		logger.debug("query all service is invoked!");
 		List<AppOwner> apps = appOwnerRepo.findAll();
-		return StringUtil.toJson(apps);
+		return JSONArray.fromObject(apps).toString();
 	}
 	
 	@RequestMapping(value="/service/update")
-	public String updateService(@RequestParam("id")String id,
+	public void updateService(@RequestParam("id")String id,
 			@RequestParam("appName")String appName,
 			@RequestParam("appUrl")String appUrl,
 			@RequestParam("owner")String owner) {
 		logger.debug("update service is invoked!");
 		Long idLong = Long.valueOf(id);
-		appOwnerRepo.findOne(idLong);
-		AppOwner appOwnerDto = new AppOwner(appName, appUrl, owner); 
+		logger.debug("update service is invoked!id:" + id);
+		AppOwner appOwnerDto = appOwnerRepo.findOne(idLong);
+		appOwnerDto.setAppName(appName);
+		appOwnerDto.setAppUrl(appUrl);
+		appOwnerDto.setOwner(owner);
 		appOwnerRepo.save(appOwnerDto);
-		return null;
 	}
 	
 	@RequestMapping(value="/service/delete")
-	public String deleteService(@RequestParam("id")String id) {
+	public void deleteService(@RequestParam("id")String id) {
 		logger.debug("update service is invoked!");
 		Long idLong = Long.valueOf(id);
 		appOwnerRepo.delete(idLong);
-		return null;
 	}	
 	
 }

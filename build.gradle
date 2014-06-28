@@ -42,6 +42,11 @@ dependencies {
     compile files('./lib/sae-local-1.1.0.jar')
     compile files('./lib/mail.jar')
     compile("org.apache.velocity:velocity:1.7")
+    
+    //json
+    compile files('./lib/commons-beanutils-1.9.2.jar')
+    compile files('./lib/ezmorph-1.0.6.jar')
+    compile files('./lib/json-lib-2.4-jdk15.jar')
 
     //spring
     compile("org.springframework:spring-context:" + springVersion)

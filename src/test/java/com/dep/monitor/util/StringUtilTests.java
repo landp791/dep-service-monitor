@@ -9,18 +9,5 @@ import org.junit.Test;
 
 public class StringUtilTests {
 	
-	@Test
-	public void should_not_empty_when_get_uuid() {
-		String uuid = UUID("serviceid");
-		
-		assertTrue(!StringUtils.isEmpty(uuid));
-		assertEquals(uuid.length(), 41);
-	}
 
-	@Test
-	public void should_without_line_when_get_uuid() {
-		String uuid = UUID("serviceid");
-		
-		assertTrue(!StringUtils.contains(uuid, "-"));
-	}
 }

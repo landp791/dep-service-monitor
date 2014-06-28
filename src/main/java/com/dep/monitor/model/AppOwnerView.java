@@ -1,35 +1,21 @@
 package com.dep.monitor.model;
 
+import java.util.List;
+
 public class AppOwnerView {
 	
-	private String appName;
+	private List<AppOwner> list;
 	
-	private String appUrl;
 	
-	private String toMail;
+
+	public List<AppOwner> getList() {
+		return list;
+	}
+
+	public void setList(List<AppOwner> list) {
+		this.list = list;
+	}
 	
-	public String getAppName() {
-		return appName;
-	}
-
-	public void setAppName(String appName) {
-		this.appName = appName;
-	}
-
-	public String getAppUrl() {
-		return appUrl;
-	}
-
-	public void setAppUrl(String appUrl) {
-		this.appUrl = appUrl;
-	}
-
-	public String getToMail() {
-		return toMail;
-	}
-
-	public void setToMail(String toMail) {
-		this.toMail = toMail;
-	}
+	
 }
 

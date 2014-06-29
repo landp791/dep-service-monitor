@@ -32,7 +32,7 @@ public class AllServiceMailSender implements MailSender{
 	public void send(MailInfo mailInfo) throws Exception {
 		SaeMail mail = mailHelper.newSaeMailInstance(mailInfo.getToMailAddrs());
 
-		mailHelper.doSend(mail, subject, getContent(mailInfo));
+		mailHelper.doSend(mail, new String(subject.getBytes(), "UTF-8"), getContent(mailInfo));
 		logger.debug("send all service news mail finish.");
 	}
 	
@@ -40,6 +40,7 @@ public class AllServiceMailSender implements MailSender{
 		Map<String, Object> model = Maps.newHashMap();
 		model.put("badUrls", mailInfo.getBadUrls());
 		model.put("goodUrls", mailInfo.getGoodUrls());
+		model.put("appNames", mailInfo.getAppNames());
 		
         return VelocityEngineUtils.mergeTemplateIntoString(        		
                 velocityConfigurer.getVelocityEngine(), ALL_NEWS_TEMPLATE,

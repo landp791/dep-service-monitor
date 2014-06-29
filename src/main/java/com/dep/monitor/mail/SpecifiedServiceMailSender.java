@@ -41,14 +41,14 @@ public class SpecifiedServiceMailSender implements MailSender{
 	public void send(MailInfo mailInfo) throws Exception {
 		SaeMail mail = mailHelper.newSaeMailInstance(mailInfo.getToMailAddrs());
 		setMailInfo(mailInfo);
-		mailHelper.doSend(mail, subject, content);
+		mailHelper.doSend(mail, new String(subject.getBytes(), "UTF-8"), content);
 		logger.debug("send bad news mail finish.");
 	}
 	
 	private void setMailInfo(MailInfo mailInfo) {
 		if (MAIL_TYPE_SPECIFIED_GOOD.equals(mailInfo.getType())) {
 			templateFile = GOOD_NEWS_TEMPLATE;
-			subject = "[Good News]Congratulations!Service work well now.";
+			subject = "[部门服务监控]服务已经正常工作";
 			
 			Map<String, Object> model = Maps.newHashMap();
 			model.put("url", mailInfo.getGoodUrls().get(0));
@@ -57,7 +57,7 @@ public class SpecifiedServiceMailSender implements MailSender{
 			
 		} else if (MAIL_TYPE_SPECIFIED_BAD.equals(mailInfo.getType())){
 			templateFile = BAD_NEWS_TEMPLATE;
-			subject = "[Bad News]Service goes on strike!Forget to pay salary?";
+			subject = "[部门服务监控]您负责的服务没有正常工作！请处理";
 			
 			Map<String, Object> model = Maps.newHashMap();
 			model.put("url", mailInfo.getBadUrls().get(0));

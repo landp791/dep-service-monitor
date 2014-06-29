@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 public class MailInfo {
 
 	private List<String> goodUrls;
@@ -12,7 +14,7 @@ public class MailInfo {
 	
 	private String[] toMailAddrs;
 	
-	private Map<String, String> appNames;
+	private Map<String, String> appNames = Maps.newHashMap();
 	
 	private String content;
 	

@@ -15,16 +15,16 @@ public class SAEMailHelper {
 	
 	private static final String MAIL_ENCODING = "UTF-8";
 	
-    @Value("${send.mail.from}")
+    @Value("${send_mail_from}")
     private String sendMail;
 
-    @Value("${mail.password}")
+    @Value("${mail_password}")
     private String mailPassword;
 
-    @Value("${smtp.host}")
+    @Value("${smtp_host}")
     private String smtpHost;
     
-    @Value("${smtp.port}")
+    @Value("${smtp_port}")
     private int smtpPort;
 
 	public SaeMail newSaeMailInstance(String... mailTo) {

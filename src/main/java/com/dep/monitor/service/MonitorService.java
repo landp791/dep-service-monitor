@@ -64,11 +64,9 @@ public class MonitorService {
 
 	public MailInfo prepareMailInfo(AppOwner... apps) {
 		if (apps != null && apps.length == 1) {
-			SpecifiedServiceMailInfoBuilder builder = new SpecifiedServiceMailInfoBuilder(apps[0]);
-			return builder.build();
+			return new SpecifiedServiceMailInfoBuilder(apps[0]).build();
 		} else {
-			AllServiceMailInfoBuilder builder = new AllServiceMailInfoBuilder(apps);
-			return builder.build();
+			return new AllServiceMailInfoBuilder(apps).build();
 		}
 	}
 	
@@ -136,11 +134,18 @@ public class MonitorService {
 			setType();
 			setUrl();
 			setToMail();
+			setAppNames();
 			return mailInfo;
 		}
 		
 		private void setType() {
 			mailInfo.setType(MAIL_TYPE_ALL);
+		}
+		
+		private void setAppNames(){
+			for (AppOwner app : apps) {
+				mailInfo.setAppName(app.getAppUrl(), app.getAppName());
+			}
 		}
 		
 		private void setUrl() {

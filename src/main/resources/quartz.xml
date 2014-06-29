@@ -26,7 +26,7 @@
 		<property name="jobDetail" ref="jobDetail" />
 		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
 		<!-- 每隔10秒触发 -->
-		<property name="cronExpression" value="0/20 * * * * ?" />
+		<property name="cronExpression" value="0/10 2 * * * ?" />
 		<!-- 
 		每周一到周五，早上10点就触发
 		<property name="cronExpression" value="0/0 10 * * MON-FRI ?" />

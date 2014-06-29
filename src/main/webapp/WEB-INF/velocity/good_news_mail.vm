@@ -1,7 +1,6 @@
-<h2>您负责的服务没有正常工作！请处理。</h2>
-<br/>
+<h2>Congratulations!Services work well now.</h2>
 <br/>
 
-<h4>详情如下：</h4>
+<h3>详情如下：</h3>
 <br/>
-<h4><a href="$url" target="_blank">$appName</a></h4>
+<h4><a href="$url" target="_blank">$appNames.get($url)</a></h4>

@@ -13,11 +13,6 @@
 		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
 		<property name="durability" value="true" />
 		<property name="jobClass" value="com.dep.monitor.quartz.AppMonitorJob"></property>
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="headRequest" value-ref="headRequest"/>
-			</map>
-		</property>
 	</bean>
 
 	<!-- 另一种触发器是CornTrigger -->
@@ -40,5 +35,11 @@
 			<ref bean="cornTrigger" />
 		</property>
 	</bean>
-
+	
+	<!-- MailService -->
+	<bean id="mailService"	class="com.dep.monitor.service.MailService">
+		<lookup-method name="getSpecifiedServiceMailSender" bean="specifiedServiceMailSender"/>
+		<lookup-method name="getAllServiceMailSender" bean="allServiceMailSender"/>
+	</bean>
+	
 </beans>

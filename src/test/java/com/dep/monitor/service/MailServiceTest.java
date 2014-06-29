@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.dep.monitor.mail.AllServiceMailSender;
+import com.dep.monitor.mail.SpecifiedServiceMailSender;
 import com.sina.sae.mail.SaeMail;
 
 public class MailServiceTest {
@@ -17,7 +19,21 @@ public class MailServiceTest {
 	private String MAIL_ENCODING = "UTF-8";
 	private String toMail = "261047109@qq.com";
 	
-	MailService mailService = new MailService();
+	MailService mailService = new MailService(){
+
+		@Override
+		protected SpecifiedServiceMailSender getSpecifiedServiceMailSender() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		protected AllServiceMailSender getAllServiceMailSender() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	};
 	
 //	@Test
 	public void should_OK_when_send_to_one() {

@@ -121,7 +121,7 @@
 
     <tx:annotation-driven transaction-manager="readTransactionManager"/>
     
-    <import resource="classpath*:quartz.xml"/>
+    <import resource="classpath*:beans.xml"/>
     <context:property-override/>  
     
 </beans>

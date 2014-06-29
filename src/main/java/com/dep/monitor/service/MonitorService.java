@@ -1,5 +1,6 @@
 package com.dep.monitor.service;
 
+import static java.lang.String.format;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
@@ -7,31 +8,34 @@ import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
+
+import javax.annotation.PreDestroy;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.model.MailInfo;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
-import com.dep.monitor.util.HeadRequest;
 
-@org.springframework.stereotype.Service
+@Service
 public class MonitorService {
 	private static final Log logger = LogFactory.getLog(MonitorController.class);
 	
     @Value("${dep_mail}")
 	private String DEP_MAIL_ADDR;
-
-	@Autowired
-	private HeadRequest head;
 	
 	@Autowired
 	private MailService mailService; 
@@ -39,11 +43,22 @@ public class MonitorService {
 	@Autowired
 	private AppOwnerReadRepository appOwnerReadRepo;
 	
+	private HttpClient httpClient = new DefaultHttpClient();
+
+	@PreDestroy
+	public void onDestroy() {
+		if (httpClient != null){
+			httpClient.getConnectionManager().shutdown();
+		}
+	}
+	
 	public boolean monitor(String url) {
 		try {
-			return head.withUrl(url).isOK();
-		} catch (URISyntaxException e) {
-			logger.error("Url is not valid![" + url + "]", e);
+			HttpHead head = new HttpHead(url);
+			HttpResponse resp = httpClient.execute(head);
+			int respCode = resp.getStatusLine().getStatusCode();
+			logger.debug(format("url:%s;respCode:%d", url, respCode));
+			return respCode == HttpStatus.SC_OK;
 		} catch (ClientProtocolException e) {
 			logger.error("Client protocal is not valid![" + url + "]", e);
 		} catch (IOException e) {

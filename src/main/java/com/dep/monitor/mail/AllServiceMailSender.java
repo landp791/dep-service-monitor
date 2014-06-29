@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
@@ -16,6 +17,7 @@ import com.google.common.collect.Maps;
 import com.sina.sae.mail.SaeMail;
 
 @Service
+@Scope("prototype")
 public class AllServiceMailSender implements MailSender{
 	private static final Log logger = LogFactory.getLog(AllServiceMailSender.class);
 	

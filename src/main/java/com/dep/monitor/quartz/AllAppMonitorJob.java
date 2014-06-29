@@ -8,19 +8,19 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.dep.monitor.service.MonitorService;
 
-public class AppMonitorJob extends QuartzJobBean{
-	private static final Log logger = LogFactory.getLog(AppMonitorJob.class);
+public class AllAppMonitorJob extends QuartzJobBean{
+	private static final Log logger = LogFactory.getLog(AllAppMonitorJob.class);
 	
 	private MonitorService monitorService;
 	
-	public AppMonitorJob() {
+	public AllAppMonitorJob() {
 		monitorService = (MonitorService)ContextHolder.getBean("monitorService");
 	}
 	
 	@Override
 	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
 		try {
-			logger.debug("AppMonitorJob quartz runs once!!");
+			logger.debug("AllAppMonitorJob quartz runs once!!");
 			monitorService.monitorAllApps();
 		} catch (Exception e) {
 			logger.error("Execute job fail.", e);

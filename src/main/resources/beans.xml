@@ -8,31 +8,44 @@
 
 	<!-- 集成方式：JobDetailFactoryBean，并且任务类需要继承QuartzJobBean -->
 	<!-- 定义jobDetail -->
-	<bean id="jobDetail"
+	<bean id="allAppsJobDetail"
 		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
 		<property name="durability" value="true" />
-		<property name="jobClass" value="com.dep.monitor.quartz.AppMonitorJob"></property>
+		<property name="jobClass" value="com.dep.monitor.quartz.AllAppMonitorJob"></property>
+	</bean>
+	
+	<!-- 定义jobDetail -->
+	<bean id="oneAppJobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
+		<property name="durability" value="true" />
+		<property name="jobClass" value="com.dep.monitor.quartz.OneAppMonitorJob"></property>
 	</bean>
 
-	<!-- 另一种触发器是CornTrigger -->
+	<bean id="allAppscornTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="allAppsJobDetail" />
+		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
+		<!-- 每周一到周五，早上10点就触发 -->
+		<property name="cronExpression" value="0 0 10 ? * MON-FRI"/>
+	</bean>
+	
 	<bean id="cornTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="jobDetail" />
+		<property name="jobDetail" ref="oneAppJobDetail" />
 		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
 		<!-- 每隔10秒触发 -->
-		<property name="cronExpression" value="0/10 2 * * * ?" />
-		<!-- 
-		每周一到周五，早上10点就触发
-		<property name="cronExpression" value="0/0 10 * * MON-FRI ?" />
-		 -->
-	</bean>
+		<property name="cronExpression" value="0/10 * * * * ?" />
+	</bean>	
+	
 
 	<!-- 定义核心调度器 -->
 	<bean id="scheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<ref bean="cornTrigger" />
+			<ref bean="allAppscornTrigger" />
 		</property>
 	</bean>
 	

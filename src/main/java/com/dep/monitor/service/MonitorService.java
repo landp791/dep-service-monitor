@@ -67,7 +67,7 @@ public class MonitorService {
 		return false;
 	}
 
-	public void monitorAndMarkResult(AppOwner... apps) {
+	private void monitorAndMarkResult(AppOwner... apps) {
 		for (AppOwner app : apps) {
 			if (monitor(app.getAppUrl())) {
 				app.setStatus(APP_STATUS_GOOD);
@@ -77,7 +77,7 @@ public class MonitorService {
 		}
 	}
 
-	public MailInfo prepareMailInfo(AppOwner... apps) {
+	private MailInfo prepareMailInfo(AppOwner... apps) {
 		if (apps != null && apps.length == 1) {
 			return new SpecifiedServiceMailInfoBuilder(apps[0]).build();
 		} else {
@@ -188,6 +188,18 @@ public class MonitorService {
 		AppOwner[] array = apps.toArray(new AppOwner[apps.size()]);
 		monitorAndMarkResult(array);
 		MailInfo mailInfo = prepareMailInfo(array);
+		mailService.sendMail(mailInfo);
+	}
+	
+	public void monitorOneApp(String url) throws Exception {
+		AppOwner appOwner = appOwnerReadRepo.findByAppUrl(url);
+		if (appOwner == null) {
+			logger.warn("No config for the url!["+ url +"]");
+			return;
+		}
+		
+		monitorAndMarkResult(appOwner);
+		MailInfo mailInfo = prepareMailInfo(appOwner);
 		mailService.sendMail(mailInfo);
 	}
 }

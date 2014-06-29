@@ -14,8 +14,18 @@ public class MailInfo {
 	
 	private Map<String, String> appNames;
 	
+	private String content;
+	
 	private String type;
 	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	public List<String> getGoodUrls() {
 		return goodUrls;
 	}

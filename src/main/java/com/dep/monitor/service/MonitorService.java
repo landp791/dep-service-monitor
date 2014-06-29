@@ -8,13 +8,14 @@ import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.AppOwner;
@@ -26,7 +27,8 @@ import com.dep.monitor.util.HeadRequest;
 public class MonitorService {
 	private static final Log logger = LogFactory.getLog(MonitorController.class);
 	
-	private static final String DEP_MAIL_ADDR = "";
+    @Value("${dep_mail}")
+	private String DEP_MAIL_ADDR;
 
 	@Autowired
 	private HeadRequest head;
@@ -132,13 +134,8 @@ public class MonitorService {
 		
 		public MailInfo build() {
 			setType();
-			
-			// set Url
 			setUrl();
-			
-			// set tomail
 			setToMail();
-			
 			return mailInfo;
 		}
 		
@@ -161,17 +158,16 @@ public class MonitorService {
 		}
 	}
 
-//	// should in transaction
-//	public void saveAppMonitored(String url, String appName, String[] owners) {
-//		App app = new App(url, appName);
-//		App appSaved = appWriteRepository.save(app);
-//		
-//		Set<AppOwnerDep> set = new HashSet<AppOwnerDep>();
-//		for (String owner: owners) {
-//			AppOwnerDep ao = new AppOwnerDep(appSaved.getId(), owner);
-//			set.add(ao);
-//		}
-//		appOwnerWriteRepository.save(set);
-//	}	
-	
+	public void monitorAllApps() throws Exception {
+		List<AppOwner> apps = appOwnerReadRepo.findAll();
+		if (CollectionUtils.isEmpty(apps)) {
+			logger.warn("No service configured for monitoring!");
+			return;
+		}
+		
+		AppOwner[] array = apps.toArray(new AppOwner[apps.size()]);
+		monitorAndMarkResult(array);
+		MailInfo mailInfo = prepareMailInfo(array);
+		mailService.sendMail(mailInfo);
+	}
 }

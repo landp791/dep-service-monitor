@@ -6,9 +6,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.model.MailInfo;
@@ -16,7 +16,7 @@ import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.service.MailService;
 import com.dep.monitor.service.MonitorService;
 
-@Controller
+@RestController
 public class MonitorController {
     private static final Log logger = LogFactory.getLog(MonitorController.class);
 	
@@ -30,7 +30,7 @@ public class MonitorController {
 	private AppOwnerReadRepository appOwnerRepository;
 
 	@RequestMapping(value="/service/monitor")
-	public void monitorSpecifiedService(@RequestParam("appUrl")String url) {
+	public void monitorSpecifiedService(@RequestParam("appUrl")String url) throws Exception {
 		logger.warn("Monitoring specified service start." + url);
 		AppOwner appOwner = appOwnerRepository.findByAppUrl(url);
 		if (appOwner == null) {
@@ -45,7 +45,7 @@ public class MonitorController {
 	}
 	
 	@RequestMapping(value="/all/monitor")
-	public void monitorAllService(){
+	public void monitorAllService() throws Exception{
 		logger.debug("Monitoring all services start!");
 		List<AppOwner> apps = appOwnerRepository.findAll();
 		if (CollectionUtils.isEmpty(apps)) {

@@ -12,7 +12,7 @@
 		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
 		<property name="durability" value="true" />
-		<property name="jobClass" value="com.dep.monitor.quartz.ServiceMonitorJob"></property>
+		<property name="jobClass" value="com.dep.monitor.quartz.AppMonitorJob"></property>
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="headRequest" value-ref="headRequest"/>
@@ -26,9 +26,10 @@
 		<property name="jobDetail" ref="jobDetail" />
 		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
 		<!-- 每隔10秒触发 -->
-		<property name="cronExpression" value="0/10 * * * * ?" />
+		<property name="cronExpression" value="0/20 * * * * ?" />
 		<!-- 
-		<property name="cronExpression" value="0/10 * * * * ?" />
+		每周一到周五，早上10点就触发
+		<property name="cronExpression" value="0/0 10 * * MON-FRI ?" />
 		 -->
 	</bean>
 

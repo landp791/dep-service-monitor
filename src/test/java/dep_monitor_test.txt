@@ -1,0 +1,41 @@
+页面展示功能
+--------------------------------------------------------------
+-- add        OK
+http://localhost:9898/depmonitor/api/service/add?appUrl=www.baidu.com&appName=baidu&owner=landongpingpub@163.com,landongping@sina.com
+http://localhost:9898/depmonitor/api/service/add?appUrl=www.sina.com&appName=baidu&owner=landongpingpub@163.com,landongping@sina.com
+http://localhost:9898/depmonitor/api/service/add?appUrl=www.qq.com&appName=baidu&owner=landongpingpub@163.com,landongping@sina.com
+
+-- update     OK
+http://localhost:9898/depmonitor/api/service/update?appUrl=www.baidu.com&appName=baidu&owner=landongpingpub@163.com,landongping@sina.com&id=1
+
+
+-- delete     OK
+http://localhost:9898/depmonitor/api/service/delete?id=3
+
+-- query all  OK
+http://localhost:9898/depmonitor/api/all/query
+
+
+--页面接收并展示  OK
+http://localhost:9898/depmonitor/index.html
+
+
+定时器功能 OK
+--------------------------------------------------------------
+
+
+
+邮件功能
+--------------------------------------------------------------
+all service                 OK
+
+specified service
+http://localhost:9898/depmonitor/api/service/monitor?appUrl=http://www.baidu.com           
+
+
+其他rest功能
+--------------------------------------------------------------
+
+
+
+

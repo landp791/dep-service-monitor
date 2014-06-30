@@ -26,7 +26,7 @@ public class OneAppMonitorJob extends QuartzJobBean{
 	
 	public OneAppMonitorJob() {
 		monitorService = (MonitorService)ContextHolder.getBean("monitorService");
-		appOwnerReadRepo = (AppOwnerReadRepository)ContextHolder.getBean("monitorService");
+		appOwnerReadRepo = (AppOwnerReadRepository)ContextHolder.getBean("appOwnerReadRepository");
 	}
 	
 	@Override

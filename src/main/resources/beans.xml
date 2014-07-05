@@ -45,8 +45,10 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
+			<!-- 
 				<ref bean="cornTrigger" />
 				<ref bean="allAppscornTrigger" />
+				 -->
 			</list>
 		</property>
 	</bean>

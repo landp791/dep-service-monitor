@@ -61,6 +61,12 @@ public class AppAdminController {
 		logger.debug("update service is invoked!");
 		Long idLong = Long.valueOf(id);
 		appOwnerRepo.delete(idLong);
-	}	
+	}
+	
+	@RequestMapping(value="/helloworld")
+	public void helloworld(@RequestParam("id")String id) {
+		logger.debug("helloworld is invoked!id:" + id);
+		
+	}
 	
 }

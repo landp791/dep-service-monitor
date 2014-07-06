@@ -29,16 +29,16 @@ import com.google.common.collect.Lists;
 public abstract class MailSenderWithProxy implements MailSender {
 	private static final Log log = LogFactory.getLog(MailSenderWithProxy.class);
 	
-	@Value("${proxy.host}")
+	@Value("${proxy_host}")
 	private String proxyHost;
 	
-	@Value("${proxy.port}")
+	@Value("${proxy_port}")
 	private int proxyPort;
 
-	@Value("${proxy.user.name}")
+	@Value("${proxy_user_name}")
 	private String proxyUserName;
 
-	@Value("${proxy.password}")
+	@Value("${proxy_password}")
 	private String proxyPassword;
 
 	@Value("${destination}")

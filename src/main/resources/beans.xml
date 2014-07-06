@@ -39,16 +39,13 @@
 		<property name="cronExpression" value="0/10 1 15 * * ?" />
 	</bean>	
 	
-
 	<!-- 定义核心调度器 -->
 	<bean id="scheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			<!-- 
 				<ref bean="cornTrigger" />
 				<ref bean="allAppscornTrigger" />
-				 -->
 			</list>
 		</property>
 	</bean>

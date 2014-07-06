@@ -67,12 +67,7 @@ public abstract class MailSenderWithProxy implements MailSender {
 	public void send(MailInfo mailInfo) throws Exception {
 		MailInfoView mailInfoView = refineMailInfoView(mailInfo);
 		
-		List<NameValuePair> nvps = Lists.newArrayList();
-		nvps.add(new BasicNameValuePair("to", mailInfoView.getTo()));
-		nvps.add(new BasicNameValuePair("subject", mailInfoView.getSubject()));
-		nvps.add(new BasicNameValuePair("content", mailInfoView.getContent()));
-		log.debug(format("Mail will be sent.To:%s}Subject:%s|Content:%s", mailInfoView.getTo(),
-				mailInfoView.getSubject(), mailInfoView.getContent()));
+		List<NameValuePair> nvps = prepareRequestParas(mailInfoView);
 		
 		HttpPost httpPost = new HttpPost(dest);
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
@@ -81,6 +76,16 @@ public abstract class MailSenderWithProxy implements MailSender {
 		if (isOK(resp)) {
 			log.debug("Sending mail OK.");
 		}
+	}
+
+	private List<NameValuePair> prepareRequestParas(MailInfoView mailInfoView) {
+		List<NameValuePair> nvps = Lists.newArrayList();
+		nvps.add(new BasicNameValuePair("to", mailInfoView.getTo()));
+		nvps.add(new BasicNameValuePair("subject", mailInfoView.getSubject()));
+		nvps.add(new BasicNameValuePair("content", mailInfoView.getContent()));
+		log.debug(format("Mail will be sent.To:%s}Subject:%s|Content:%s", mailInfoView.getTo(),
+				mailInfoView.getSubject(), mailInfoView.getContent()));
+		return nvps;
 	}
 	
 	private boolean isOK(HttpResponse resp) {

@@ -13,6 +13,7 @@
     <context:component-scan base-package="com.dep.monitor"/>
     
     <context:property-placeholder location="WEB-INF/config/app.properties"/>
+    <context:property-placeholder location="WEB-INF/config/jdbc.properties"/>
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     
@@ -74,7 +75,7 @@
     <tx:annotation-driven transaction-manager="writeTransactionManager"/>
     
 
-    <!--Read persistence config-->
+    <!--Read persistence config -->
     <bean id="readJpaVendor"
           class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="showSql" value="true"/>
@@ -83,7 +84,7 @@
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/depmonitor"/>
+        <property name="jdbcUrl" value="jdbc:mysql://10.20.12.170:3306/depmonitor"/>
         <property name="user" value="root"/>
         <property name="password" value="root"/>
         <property name="acquireIncrement" value="1"/>

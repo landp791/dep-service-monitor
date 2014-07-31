@@ -51,9 +51,9 @@ public abstract class MailSenderWithProxy implements MailSender {
 		httpClient = new DefaultHttpClient();
 
 		// set proxy access
-		AuthScope authscope=new AuthScope(proxyHost, proxyPort);
-        Credentials credentials=new UsernamePasswordCredentials(proxyUserName, proxyPassword);
-        httpClient.getCredentialsProvider().setCredentials(authscope, credentials);
+//        AuthScope authscope = new AuthScope(proxyHost, proxyPort);
+//        Credentials credentials=new UsernamePasswordCredentials(proxyUserName, proxyPassword);
+//        httpClient.getCredentialsProvider().setCredentials(authscope, credentials);
 	}
 
 	@PreDestroy

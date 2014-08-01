@@ -16,6 +16,11 @@ import com.dep.monitor.model.MailInfo;
 import com.dep.monitor.model.MailInfoView;
 import com.google.common.collect.Maps;
 
+/**
+ * 组装邮件基本信息，准备发送内容。
+ * @author LANDONGPING791
+ *
+ */
 @Service
 public class SpecifiedServiceMailSender extends MailSenderWithProxy{
 	private final String GOOD_NEWS_TEMPLATE = "good_news_mail.vm";
@@ -39,7 +44,7 @@ public class SpecifiedServiceMailSender extends MailSenderWithProxy{
 		}
 	}
 	
-	private void parseWhenServiceBad(MailInfo mailInfo) {
+	private void parseWhenServiceGood(MailInfo mailInfo) {
 		templateFile = GOOD_NEWS_TEMPLATE;
 		subject = "[部门服务监控]服务已经正常工作";
 		
@@ -49,7 +54,7 @@ public class SpecifiedServiceMailSender extends MailSenderWithProxy{
 		content = mailContent(model);
 	}
 
-	private void parseWhenServiceGood(MailInfo mailInfo) {
+	private void parseWhenServiceBad(MailInfo mailInfo) {
 		templateFile = BAD_NEWS_TEMPLATE;
 		subject = "[部门服务监控]您负责的服务没有正常工作！请处理";
 		

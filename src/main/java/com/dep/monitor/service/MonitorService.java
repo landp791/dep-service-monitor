@@ -1,11 +1,11 @@
 package com.dep.monitor.service;
 
-import static java.lang.String.format;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
+import static com.dep.monitor.util.HttpClientHelper.isOK;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpHead;
@@ -56,9 +55,8 @@ public class MonitorService {
 		try {
 			HttpHead head = new HttpHead(url);
 			HttpResponse resp = httpClient.execute(head);
-			int respCode = resp.getStatusLine().getStatusCode();
-			logger.debug(format("url:%s;respCode:%d", url, respCode));
-			return respCode == HttpStatus.SC_OK;
+			
+			return isOK(resp);
 		} catch (ClientProtocolException e) {
 			logger.error("Client protocal is not valid![" + url + "]", e);
 		} catch (IOException e) {
@@ -67,7 +65,7 @@ public class MonitorService {
 		return false;
 	}
 
-	private void monitorAndMarkResult(AppOwner... apps) {
+	private void monitorAndMarkDownResult(AppOwner... apps) {
 		for (AppOwner app : apps) {
 			if (monitor(app.getAppUrl())) {
 				app.setStatus(APP_STATUS_GOOD);
@@ -132,7 +130,7 @@ public class MonitorService {
 		}
 		
 		private void addAppName() {
-			mailInfo.setAppName(app.getAppUrl(),app.getAppName());
+			mailInfo.addAppName(app.getAppUrl(),app.getAppName());
 		}
 	}
 
@@ -159,7 +157,7 @@ public class MonitorService {
 		
 		private void setAppNames(){
 			for (AppOwner app : apps) {
-				mailInfo.setAppName(app.getAppUrl(), app.getAppName());
+				mailInfo.addAppName(app.getAppUrl(), app.getAppName());
 			}
 		}
 		
@@ -186,7 +184,7 @@ public class MonitorService {
 		}
 		
 		AppOwner[] array = apps.toArray(new AppOwner[apps.size()]);
-		monitorAndMarkResult(array);
+		monitorAndMarkDownResult(array);
 		MailInfo mailInfo = prepareMailInfo(array);
 		mailService.sendMail(mailInfo);
 	}
@@ -198,7 +196,7 @@ public class MonitorService {
 			return;
 		}
 		
-		monitorAndMarkResult(appOwner);
+		monitorAndMarkDownResult(appOwner);
 		MailInfo mailInfo = prepareMailInfo(appOwner);
 		mailService.sendMail(mailInfo);
 	}

@@ -56,7 +56,7 @@ public class MailInfo {
 		return appNames;
 	}
 
-	public void setAppName(String appUrl, String appName) {
+	public void addAppName(String appUrl, String appName) {
 		this.appNames.put(appUrl, appName);
 	}
 

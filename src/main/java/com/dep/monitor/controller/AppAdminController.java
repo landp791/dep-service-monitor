@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -31,13 +32,18 @@ public class AppAdminController {
 		logger.debug("add service is invoked!");
 		AppOwner appOwner = new AppOwner(appName, appUrl, owner); 
 		appOwnerRepo.save(appOwner);
+		logger.debug("add service is finished!");
 	}
 	
 	@RequestMapping(value="/all/query")
 	public Object queryAllApp() throws JsonGenerationException, JsonMappingException, IOException {
 		logger.debug("query all service is invoked!");
 		List<AppOwner> apps = appOwnerRepo.findAll();
-		logger.debug(format("size of apps: %s", apps.size()));
+		if (!CollectionUtils.isEmpty(apps)) {
+		    logger.debug(format("query all apps is finished.size of apps: %s", apps.size()));
+		} else {
+		    logger.debug("query all apps is finished.size of apps: 0");
+		}
 		return apps;
 	}
 	
@@ -54,18 +60,20 @@ public class AppAdminController {
 		appOwnerDto.setAppUrl(appUrl);
 		appOwnerDto.setOwner(owner);
 		appOwnerRepo.save(appOwnerDto);
+		logger.debug("update service is finished!");
 	}
 	
 	@RequestMapping(value="/service/delete")
 	public void deleteService(@RequestParam("id")String id) {
-		logger.debug("update service is invoked!");
+		logger.debug(format("delete service is invoked!id:%s", id));
 		Long idLong = Long.valueOf(id);
 		appOwnerRepo.delete(idLong);
+		logger.debug(format("delete service is finished!id:%s", id));
 	}
 	
 	@RequestMapping(value="/helloworld")
 	public void helloworld(@RequestParam("id")String id) {
-		logger.debug("helloworld is invoked!id:" + id);
+		logger.debug("helloworld is ok!id:" + id);
 		
 	}
 	

@@ -16,8 +16,8 @@ public class AllServiceMailSenderTest {
 	
 	public MailInfo aMailInfo() {
 		MailInfo mailInfo = new MailInfo();
-		mailInfo.setAppName("http://www.baidu.com", "baidu");
-		mailInfo.setAppName("http://www.sina.com", "sina");
+		mailInfo.addAppName("http://www.baidu.com", "baidu");
+		mailInfo.addAppName("http://www.sina.com", "sina");
 		
 		mailInfo.setGoodUrls(Arrays.asList("http://www.baidu.com"));
 		mailInfo.setBadUrls(Arrays.asList("http://www.sina.com"));

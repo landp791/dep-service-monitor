@@ -1,6 +1,7 @@
 package com.dep.monitor.mail;
 
 import static java.lang.String.format;
+import static com.dep.monitor.util.HttpClientHelper.isOK;
 
 import java.util.List;
 
@@ -9,13 +10,14 @@ import javax.annotation.PreDestroy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,9 +53,10 @@ public abstract class MailSenderWithProxy implements MailSender {
 		httpClient = new DefaultHttpClient();
 
 		// set proxy access
-//        AuthScope authscope = new AuthScope(proxyHost, proxyPort);
-//        Credentials credentials=new UsernamePasswordCredentials(proxyUserName, proxyPassword);
-//        httpClient.getCredentialsProvider().setCredentials(authscope, credentials);
+		httpClient.getCredentialsProvider().setCredentials(new AuthScope(proxyHost, proxyPort),
+                new UsernamePasswordCredentials(proxyUserName, proxyPassword));
+        HttpHost proxy = new HttpHost(proxyHost, proxyPort);
+        httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 	}
 
 	@PreDestroy
@@ -66,7 +69,6 @@ public abstract class MailSenderWithProxy implements MailSender {
 	@Override
 	public void send(MailInfo mailInfo) throws Exception {
 		MailInfoView mailInfoView = refineMailInfoView(mailInfo);
-		
 		List<NameValuePair> nvps = prepareRequestParas(mailInfoView);
 		
 		HttpPost httpPost = new HttpPost(dest);
@@ -86,10 +88,6 @@ public abstract class MailSenderWithProxy implements MailSender {
 		log.debug(format("Mail will be sent.To:%s}Subject:%s|Content:%s", mailInfoView.getTo(),
 				mailInfoView.getSubject(), mailInfoView.getContent()));
 		return nvps;
-	}
-	
-	private boolean isOK(HttpResponse resp) {
-		return resp.getStatusLine().getStatusCode() == 200;
 	}
 	
 	protected abstract MailInfoView refineMailInfoView(MailInfo mailInfo);

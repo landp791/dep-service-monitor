@@ -1,10 +1,10 @@
 package com.dep.monitor.mail;
 
-import com.dep.monitor.model.MailInfo;
+import com.dep.monitor.model.MonitorInfo;
 
 public interface MailSender {
 	static String MAIL_ENCODING = "UTF-8";
 
-	void send(MailInfo mailInfo) throws Exception;
+	void send(MonitorInfo mailInfo) throws Exception;
 	
 }

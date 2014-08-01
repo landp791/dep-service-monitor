@@ -32,13 +32,16 @@ public class OneAppMonitorJob extends QuartzJobBean{
 	@Override
 	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
 		try {
-			logger.debug("OneAppMonitorJob quartz runs once!!");
-			List<AppOwner> apps = appOwnerReadRepo.findAll();
-			for (AppOwner app : apps) {
-				if (!haveMonitoredInOneHour(app)) {
-					monitorService.monitorOneApp(app.getAppUrl());
-				}
-			}
+			long now = System.currentTimeMillis();
+		    logger.debug("OneAppMonitorJob quartz runs once!!now:" + now);
+			
+			
+//			List<AppOwner> apps = appOwnerReadRepo.findAll();
+//			for (AppOwner app : apps) {
+//				if (!haveMonitoredInOneHour(app)) {
+//					monitorService.monitorOneApp(app.getAppUrl());
+//				}
+//			}
 		} catch (Exception e) {
 			logger.error("Execute OneAppMonitorJob fail.", e);
 		} 

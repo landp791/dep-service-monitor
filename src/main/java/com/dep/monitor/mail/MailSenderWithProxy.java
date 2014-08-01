@@ -23,8 +23,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.dep.monitor.model.MonitorInfo;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.model.MailInfoView;
 import com.google.common.collect.Lists;
 
 @Component
@@ -67,8 +67,8 @@ public abstract class MailSenderWithProxy implements MailSender {
 	}
 
 	@Override
-	public void send(MailInfo mailInfo) throws Exception {
-		MailInfoView mailInfoView = refineMailInfoView(mailInfo);
+	public void send(MonitorInfo mailInfo) throws Exception {
+		MailInfo mailInfoView = refineMailInfoView(mailInfo);
 		List<NameValuePair> nvps = prepareRequestParas(mailInfoView);
 		
 		HttpPost httpPost = new HttpPost(dest);
@@ -80,7 +80,7 @@ public abstract class MailSenderWithProxy implements MailSender {
 		}
 	}
 
-	private List<NameValuePair> prepareRequestParas(MailInfoView mailInfoView) {
+	private List<NameValuePair> prepareRequestParas(MailInfo mailInfoView) {
 		List<NameValuePair> nvps = Lists.newArrayList();
 		nvps.add(new BasicNameValuePair("to", mailInfoView.getTo()));
 		nvps.add(new BasicNameValuePair("subject", mailInfoView.getSubject()));
@@ -90,6 +90,6 @@ public abstract class MailSenderWithProxy implements MailSender {
 		return nvps;
 	}
 	
-	protected abstract MailInfoView refineMailInfoView(MailInfo mailInfo);
+	protected abstract MailInfo refineMailInfoView(MonitorInfo mailInfo);
 	
 }

@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.AppOwner;
-import com.dep.monitor.model.MailInfo;
+import com.dep.monitor.model.MonitorInfo;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
 
 @Service
@@ -75,7 +75,7 @@ public class MonitorService {
 		}
 	}
 
-	private MailInfo prepareMailInfo(AppOwner... apps) {
+	private MonitorInfo prepareMailInfo(AppOwner... apps) {
 		if (apps != null && apps.length == 1) {
 			return new SpecifiedServiceMailInfoBuilder(apps[0]).build();
 		} else {
@@ -85,14 +85,14 @@ public class MonitorService {
 	
 	private class SpecifiedServiceMailInfoBuilder{
 		private AppOwner app;
-		private MailInfo mailInfo;
+		private MonitorInfo mailInfo;
 		
 		public SpecifiedServiceMailInfoBuilder(AppOwner app) {
 			this.app = app;
-			mailInfo = new MailInfo();
+			mailInfo = new MonitorInfo();
 		}
 		
-		public MailInfo build() {
+		public MonitorInfo build() {
 			// set type
 			setType();
 			
@@ -136,14 +136,14 @@ public class MonitorService {
 
 	private class AllServiceMailInfoBuilder{
 		private AppOwner[] apps;
-		private MailInfo mailInfo;
+		private MonitorInfo mailInfo;
 		
 		public AllServiceMailInfoBuilder(AppOwner... apps) {
 			this.apps = apps;
-			mailInfo = new MailInfo();
+			mailInfo = new MonitorInfo();
 		}
 		
-		public MailInfo build() {
+		public MonitorInfo build() {
 			setType();
 			setUrl();
 			setToMail();
@@ -185,7 +185,7 @@ public class MonitorService {
 		
 		AppOwner[] array = apps.toArray(new AppOwner[apps.size()]);
 		monitorAndMarkDownResult(array);
-		MailInfo mailInfo = prepareMailInfo(array);
+		MonitorInfo mailInfo = prepareMailInfo(array);
 		mailService.sendMail(mailInfo);
 	}
 	
@@ -197,7 +197,7 @@ public class MonitorService {
 		}
 		
 		monitorAndMarkDownResult(appOwner);
-		MailInfo mailInfo = prepareMailInfo(appOwner);
+		MonitorInfo mailInfo = prepareMailInfo(appOwner);
 		mailService.sendMail(mailInfo);
 	}
 }

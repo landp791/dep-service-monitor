@@ -16,7 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 
-import com.dep.monitor.model.MailInfoView;
+import com.dep.monitor.model.MailInfo;
 import com.google.common.collect.Lists;
 
 public class HttpClientWithProxyTest {
@@ -93,7 +93,7 @@ public class HttpClientWithProxyTest {
         return url;
     }
     
-    private List<NameValuePair> prepareRequestParas(MailInfoView mailInfoView) {
+    private List<NameValuePair> prepareRequestParas(MailInfo mailInfoView) {
         List<NameValuePair> nvps = Lists.newArrayList();
         nvps.add(new BasicNameValuePair("to", mailInfoView.getTo()));
         nvps.add(new BasicNameValuePair("subject", mailInfoView.getSubject()));
@@ -101,8 +101,8 @@ public class HttpClientWithProxyTest {
         return nvps;
     }
     
-    private MailInfoView aMailInfoView() {
-        MailInfoView mv = new MailInfoView();
+    private MailInfo aMailInfoView() {
+        MailInfo mv = new MailInfo();
         mv.setContent("Just a test!");
         mv.setSubject("Test email");
         mv.setTo("landongping791@pingan.com");

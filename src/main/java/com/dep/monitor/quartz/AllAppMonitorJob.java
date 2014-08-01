@@ -20,8 +20,10 @@ public class AllAppMonitorJob extends QuartzJobBean{
 	@Override
 	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
 		try {
-			logger.debug("AllAppMonitorJob quartz runs once!!");
-			monitorService.monitorAllApps();
+		    long now = System.currentTimeMillis();
+			logger.debug("AllAppMonitorJob quartz runs once!!now:" + now);
+			
+//			monitorService.monitorAllApps();
 		} catch (Exception e) {
 			logger.error("Execute job fail.", e);
 		} 

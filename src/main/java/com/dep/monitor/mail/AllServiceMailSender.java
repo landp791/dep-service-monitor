@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
+import com.dep.monitor.model.MonitorInfo;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.model.MailInfoView;
 import com.google.common.collect.Maps;
 
 @Service
@@ -22,7 +22,7 @@ public class AllServiceMailSender extends MailSenderWithProxy{
     private VelocityConfigurer velocityConfigurer;
 	
 	
-	private String getContent(MailInfo mailInfo) {
+	private String getContent(MonitorInfo mailInfo) {
 		Map<String, Object> model = Maps.newHashMap();
 		model.put("badUrls", mailInfo.getBadUrls());
 		model.put("goodUrls", mailInfo.getGoodUrls());
@@ -34,8 +34,8 @@ public class AllServiceMailSender extends MailSenderWithProxy{
 	}
 
 	@Override
-	protected MailInfoView refineMailInfoView(MailInfo mailInfo) {
-		MailInfoView view = new MailInfoView();
+	protected MailInfo refineMailInfoView(MonitorInfo mailInfo) {
+		MailInfo view = new MailInfo();
 		view.setTo(StringUtils.join(mailInfo.getToMailAddrs(), ","));
 		view.setSubject(subject);
 		view.setContent(getContent(mailInfo));

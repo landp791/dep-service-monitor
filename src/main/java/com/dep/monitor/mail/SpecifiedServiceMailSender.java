@@ -1,5 +1,6 @@
 package com.dep.monitor.mail;
 
+import static java.lang.String.format;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
 
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
+import com.dep.monitor.model.MonitorInfo;
 import com.dep.monitor.model.MailInfo;
-import com.dep.monitor.model.MailInfoView;
 import com.google.common.collect.Maps;
 
 /**
@@ -35,16 +36,17 @@ public class SpecifiedServiceMailSender extends MailSenderWithProxy{
 	
 	private String content;
 	
-	
-	private void parseMailInfo(MailInfo mailInfo){
+	private void parseMailInfo(MonitorInfo mailInfo){
 		if (MAIL_TYPE_SPECIFIED_GOOD.equals(mailInfo.getType())) {
 			parseWhenServiceGood(mailInfo);
 		} else if (MAIL_TYPE_SPECIFIED_BAD.equals(mailInfo.getType())){
 			parseWhenServiceBad(mailInfo);
+		} else {
+		    throw new RuntimeException(format("Not Supported mail Type.[%s]", mailInfo.getType()));
 		}
 	}
 	
-	private void parseWhenServiceGood(MailInfo mailInfo) {
+	private void parseWhenServiceGood(MonitorInfo mailInfo) {
 		templateFile = GOOD_NEWS_TEMPLATE;
 		subject = "[部门服务监控]服务已经正常工作";
 		
@@ -54,7 +56,7 @@ public class SpecifiedServiceMailSender extends MailSenderWithProxy{
 		content = mailContent(model);
 	}
 
-	private void parseWhenServiceBad(MailInfo mailInfo) {
+	private void parseWhenServiceBad(MonitorInfo mailInfo) {
 		templateFile = BAD_NEWS_TEMPLATE;
 		subject = "[部门服务监控]您负责的服务没有正常工作！请处理";
 		
@@ -71,10 +73,10 @@ public class SpecifiedServiceMailSender extends MailSenderWithProxy{
 	}
 
 	@Override
-	protected MailInfoView refineMailInfoView(MailInfo mailInfo) {
+	protected MailInfo refineMailInfoView(MonitorInfo mailInfo) {
 		parseMailInfo(mailInfo);
 		
-		MailInfoView view = new MailInfoView();
+		MailInfo view = new MailInfo();
 		view.setTo(StringUtils.join(mailInfo.getToMailAddrs(), ","));
 		view.setSubject(subject);
 		view.setContent(content);

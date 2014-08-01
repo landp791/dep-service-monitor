@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
-import com.dep.monitor.model.MailInfo;
+import com.dep.monitor.model.MonitorInfo;
 
 public class AllServiceMailSenderTest {
 	private VelocityConfigurer velocityConfigurer;
@@ -14,8 +14,8 @@ public class AllServiceMailSenderTest {
 		
 	}
 	
-	public MailInfo aMailInfo() {
-		MailInfo mailInfo = new MailInfo();
+	public MonitorInfo aMailInfo() {
+		MonitorInfo mailInfo = new MonitorInfo();
 		mailInfo.addAppName("http://www.baidu.com", "baidu");
 		mailInfo.addAppName("http://www.sina.com", "sina");
 		

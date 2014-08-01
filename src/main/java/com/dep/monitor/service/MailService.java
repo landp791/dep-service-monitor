@@ -5,7 +5,7 @@ import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
 
 import com.dep.monitor.mail.AllServiceMailSender;
 import com.dep.monitor.mail.SpecifiedServiceMailSender;
-import com.dep.monitor.model.MailInfo;
+import com.dep.monitor.model.MonitorInfo;
 
 public abstract class MailService {
 	
@@ -18,7 +18,7 @@ public abstract class MailService {
      * @param mailInfo
      * @throws Exception 
      */
-	public void sendMail(MailInfo mailInfo) throws Exception {
+	public void sendMail(MonitorInfo mailInfo) throws Exception {
 		if (isSpecifiedAppMonitor(mailInfo.getType())) {
 			getSpecifiedServiceMailSender().send(mailInfo);
 		} else {

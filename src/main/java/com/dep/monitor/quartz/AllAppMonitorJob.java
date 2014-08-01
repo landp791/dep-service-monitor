@@ -22,8 +22,7 @@ public class AllAppMonitorJob extends QuartzJobBean{
 		try {
 		    long now = System.currentTimeMillis();
 			logger.debug("AllAppMonitorJob quartz runs once!!now:" + now);
-			
-//			monitorService.monitorAllApps();
+			monitorService.monitorAllApps();
 		} catch (Exception e) {
 			logger.error("Execute job fail.", e);
 		} 

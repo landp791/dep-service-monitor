@@ -34,14 +34,12 @@ public class OneAppMonitorJob extends QuartzJobBean{
 		try {
 			long now = System.currentTimeMillis();
 		    logger.debug("OneAppMonitorJob quartz runs once!!now:" + now);
-			
-			
-//			List<AppOwner> apps = appOwnerReadRepo.findAll();
-//			for (AppOwner app : apps) {
-//				if (!haveMonitoredInOneHour(app)) {
-//					monitorService.monitorOneApp(app.getAppUrl());
-//				}
-//			}
+			List<AppOwner> apps = appOwnerReadRepo.findAll();
+			for (AppOwner app : apps) {
+				if (!haveMonitoredInOneHour(app)) {
+					monitorService.monitorOneApp(app.getAppUrl());
+				}
+			}
 		} catch (Exception e) {
 			logger.error("Execute OneAppMonitorJob fail.", e);
 		} 

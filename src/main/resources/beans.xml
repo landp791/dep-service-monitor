@@ -1,55 +1,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task" 
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context 
-        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/task  
+		http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
-	<!-- 集成方式：JobDetailFactoryBean，并且任务类需要继承QuartzJobBean -->
-	<!-- 定义jobDetail -->
-	<bean id="allAppsJobDetail"
-		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
-		<property name="durability" value="true" />
-		<property name="jobClass" value="com.dep.monitor.quartz.AllAppMonitorJob"></property>
-	</bean>
-	
-	<!-- 定义jobDetail -->
-	<bean id="oneAppJobDetail"
-		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-		<!-- durability 表示任务完成之后是否依然保留到数据库，默认false -->
-		<property name="durability" value="true" />
-		<property name="jobClass" value="com.dep.monitor.quartz.OneAppMonitorJob"></property>
-	</bean>
+	<!-- quartz scheduling -->
+	<task:annotation-driven/> 	
 
-	<bean id="allAppscornTrigger"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="allAppsJobDetail" />
-		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
-		<!-- 每周一到周五，早上10点就触发 -->
-		<property name="cronExpression" value="0 0 10 ? * MON-FRI"/>
-	</bean>
-	
-	<bean id="cornTrigger"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="oneAppJobDetail" />
-		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
-		<!-- 每隔10秒触发 -->
-		<property name="cronExpression" value="0/10 * * * * ?" />
-	</bean>	
-	
-	<!-- 定义核心调度器 -->
-	<bean id="scheduler"
-		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="cornTrigger" />
-				<ref bean="allAppscornTrigger" />
-			</list>
-		</property>
-	</bean>
-	
 	<!-- MailService -->
 	<bean id="mailService"	class="com.dep.monitor.service.MailService">
 		<lookup-method name="getSpecifiedServiceMailSender" bean="specifiedServiceMailSender"/>

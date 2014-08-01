@@ -2,13 +2,12 @@ package com.dep.monitor.quartz;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.dep.monitor.service.MonitorService;
 
-public class AllAppMonitorJob extends QuartzJobBean{
+public class AllAppMonitorJob {
 	private static final Log logger = LogFactory.getLog(AllAppMonitorJob.class);
 	
 	private MonitorService monitorService;
@@ -17,8 +16,8 @@ public class AllAppMonitorJob extends QuartzJobBean{
 		monitorService = (MonitorService)ContextHolder.getBean("monitorService");
 	}
 	
-	@Override
-	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
+	@Scheduled(cron="0 0 10 ? * MON-FRI")
+	protected void execute() throws JobExecutionException {
 		try {
 		    long now = System.currentTimeMillis();
 			logger.debug("AllAppMonitorJob quartz runs once!!now:" + now);

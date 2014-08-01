@@ -5,16 +5,17 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.service.MonitorService;
 import com.google.common.collect.Maps;
 
-public class OneAppMonitorJob extends QuartzJobBean{
+@Component
+public class OneAppMonitorJob{
 	private static final Log logger = LogFactory.getLog(OneAppMonitorJob.class);
 	private static final long ONE_HOUR = 1 * 60 * 60 * 1000l;
 	
@@ -29,8 +30,8 @@ public class OneAppMonitorJob extends QuartzJobBean{
 		appOwnerReadRepo = (AppOwnerReadRepository)ContextHolder.getBean("appOwnerReadRepository");
 	}
 	
-	@Override
-	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
+	@Scheduled(fixedDelay = 10000)
+	public void execute() throws JobExecutionException {
 		try {
 			long now = System.currentTimeMillis();
 		    logger.debug("OneAppMonitorJob quartz runs once!!now:" + now);

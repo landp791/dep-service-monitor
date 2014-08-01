@@ -1,29 +1,67 @@
 package com.dep.monitor.mail;
 
-import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.junit.Test;
 
 import com.dep.monitor.model.MailInfoView;
 import com.google.common.collect.Lists;
 
 public class HttpClientWithProxyTest {
     DefaultHttpClient httpclient = new DefaultHttpClient();
+    
+    @Test
+    public void should_not_OK_when_acc_badidu_not_via_proxy() throws Exception {
+        try {
+            HttpGet httpget = new HttpGet("http://www.baidu.com/");
+            HttpResponse response = httpclient.execute(httpget);
 
-    public void should_OK_when_access_baidu_with_proxy() throws Exception {
+            assertEquals(false,isOK(response));
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+        }
+    }
+    
+    @Test
+    public void should_OK_when_acc_badidu_with_proxy() throws Exception {
+        try {
+            httpclient.getCredentialsProvider().setCredentials(new AuthScope("10.37.84.124", 8080),
+                    new UsernamePasswordCredentials("landongping791", "ldpPA&(!"));
+
+            HttpHost proxy = new HttpHost("10.37.84.124", 8080);
+            httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+            HttpGet httpget = new HttpGet("http://www.baidu.com/");
+            HttpResponse response = httpclient.execute(httpget);
+
+            assertEquals(true,isOK(response));
+        } finally {
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+        }
+    }
+    
+
+    @Test
+    public void should_OK_when_send_mail_with_proxy() throws Exception {
         try {
             httpclient.getCredentialsProvider().setCredentials(new AuthScope("10.37.84.124", 8080),
                     new UsernamePasswordCredentials("landongping791", "ldpPA&(!"));
@@ -32,38 +70,27 @@ public class HttpClientWithProxyTest {
             HttpHost proxy = new HttpHost("10.37.84.124", 8080);
 
             httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-            HttpPost httppost = new HttpPost("/api/mail/forward");
+            HttpPost httpPost = new HttpPost(buildReqUrl());
             
-//            List<NameValuePair> nvps = prepareRequestParas(mailInfoView);
-//            
-//            HttpPost httpPost = new HttpPost(dest);
+//            List<NameValuePair> nvps = prepareRequestParas(aMailInfoView());
+            
 //            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
-//            HttpResponse resp = httpClient.execute(httpPost);
-//
-//            if (isOK(resp)) {
-//                log.debug("Sending mail OK.");
-//            }
-            
-            System.out.println("executing request: " + httppost.getRequestLine());
-            System.out.println("via proxy: " + proxy);
-            System.out.println("to target: " + targetHost);
-            
-            HttpResponse response = httpclient.execute(targetHost, httppost);
-            HttpEntity entity = response.getEntity();
+            HttpResponse response = httpclient.execute(targetHost, httpPost);
 
-            System.out.println("----------------------------------------");
-            System.out.println(response.getStatusLine());
-            if (entity != null) {
-                System.out.println("Response content length: " + entity.getContentLength());
-            }
-            EntityUtils.consume(entity);
-
+            assertEquals(true,isOK(response));
         } finally {
             // When HttpClient instance is no longer needed,
             // shut down the connection manager to ensure
             // immediate deallocation of all system resources
             httpclient.getConnectionManager().shutdown();
         }
+    }
+    
+    private String buildReqUrl() {
+        String url = "/api/mail/forward?to=landongping@pingan.com&subject=TestEmail&content=JustATest";
+        
+        
+        return url;
     }
     
     private List<NameValuePair> prepareRequestParas(MailInfoView mailInfoView) {
@@ -75,6 +102,15 @@ public class HttpClientWithProxyTest {
     }
     
     private MailInfoView aMailInfoView() {
-        return null;
+        MailInfoView mv = new MailInfoView();
+        mv.setContent("Just a test!");
+        mv.setSubject("Test email");
+        mv.setTo("landongping791@pingan.com");
+        
+        return mv;
+    }
+    
+    private boolean isOK(HttpResponse resp) {
+        return resp.getStatusLine().getStatusCode() == 200;
     }
 }

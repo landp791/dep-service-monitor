@@ -36,7 +36,7 @@
 		<property name="jobDetail" ref="oneAppJobDetail" />
 		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
 		<!-- 每隔10秒触发 -->
-		<property name="cronExpression" value="0/10 1 15 * * ?" />
+		<property name="cronExpression" value="0/10 * * * * ?" />
 	</bean>	
 	
 	<!-- 定义核心调度器 -->

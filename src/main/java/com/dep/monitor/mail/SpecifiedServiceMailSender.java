@@ -18,7 +18,7 @@ import com.dep.monitor.model.MailInfo;
 import com.google.common.collect.Maps;
 
 /**
- * 组装邮件基本信息，准备发送内容。
+ * Send out forward-mail request.
  * @author LANDONGPING791
  *
  */

@@ -16,7 +16,8 @@ public class AllAppMonitorJob {
 		monitorService = (MonitorService)ContextHolder.getBean("monitorService");
 	}
 	
-	@Scheduled(cron="0 0 19 ? * MON-FRI")
+//	@Scheduled(cron="0 19 30 ? * MON-FRI")
+	@Scheduled(fixedDelay = 5000)
 	protected void execute() throws JobExecutionException {
 		try {
 		    long now = System.currentTimeMillis();

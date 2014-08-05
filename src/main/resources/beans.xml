@@ -27,16 +27,19 @@
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="allAppsJobDetail" />
 		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
-		<!-- 每周一到周五，早上10点就触发 -->
+		<!-- 每周一到周五，早上10点就触发
 		<property name="cronExpression" value="0 0 10 ? * MON-FRI"/>
+		<property name="cronExpression" value="0/10 * * * * ?"/>
+		 -->
+		<property name="cronExpression" value="0 0 14 ? * MON-FRI"/>
 	</bean>
 	
 	<bean id="cornTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="oneAppJobDetail" />
 		<!--  [秒] [分] [小时] [日] [月] [周] [年] -->
-		<!-- 每隔10秒触发 -->
-		<property name="cronExpression" value="0/10 * * * * ?" />
+		<!-- 每隔分钟触发 -->
+		<property name="cronExpression" value="1 0/1 * * * ?" />
 	</bean>	
 	
 	<!-- 定义核心调度器 -->

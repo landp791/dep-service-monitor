@@ -1,17 +1,18 @@
 package com.dep.monitor.service;
 
-import static java.lang.String.format;
+import static com.dep.monitor.util.HttpClientHelper.isOK;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_BAD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_SPECIFIED_GOOD;
-import static com.dep.monitor.util.HttpClientHelper.isOK;
+import static java.lang.String.format;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -21,7 +22,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpHead;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -45,7 +48,13 @@ public class MonitorService {
 	@Autowired
 	private AppOwnerReadRepository appOwnerReadRepo;
 	
-	private HttpClient httpClient = new DefaultHttpClient();
+	private HttpClient httpClient;
+	
+	@PostConstruct
+	public void init() {
+	    ClientConnectionManager connManager = new PoolingClientConnectionManager();
+	    httpClient = new DefaultHttpClient(connManager);
+	}
 
 	@PreDestroy
 	public void onDestroy() {
@@ -81,8 +90,11 @@ public class MonitorService {
 		}
 	}
 
-	private MonitorInfo prepareMailInfo(AppOwner... apps) {
-		if (apps != null && apps.length == 1) {
+	private MonitorInfo prepareMailInfo(String flag, AppOwner... apps) {
+	    if (apps == null) {
+	        return null;
+	    }
+		if ("one".equals(flag)) {
 			return new SpecifiedServiceMailInfoBuilder(apps[0]).build();
 		} else {
 			return new AllServiceMailInfoBuilder(apps).build();
@@ -191,7 +203,7 @@ public class MonitorService {
 		
 		AppOwner[] array = apps.toArray(new AppOwner[apps.size()]);
 		monitorAndMarkDownResult(array);
-		MonitorInfo mailInfo = prepareMailInfo(array);
+		MonitorInfo mailInfo = prepareMailInfo("all",array);
 		mailService.sendMail(mailInfo);
 	}
 	
@@ -206,7 +218,7 @@ public class MonitorService {
 		monitorAndMarkDownResult(appOwner);
         if (isNeedToSendMail(appOwner)){
             lastStates.put(appOwner.getAppUrl(), appOwner.getStatus());
-            MonitorInfo mailInfo = prepareMailInfo(appOwner);
+            MonitorInfo mailInfo = prepareMailInfo("one", appOwner);
             mailService.sendMail(mailInfo);
         }
 	}
@@ -227,8 +239,8 @@ public class MonitorService {
 	}
 	
     private boolean statesNotChanged(AppOwner appOwner) {
-        return lastStates.get(appOwner.getAppUrl()) == appOwner.getStatus() || 
-                lastStates.get(appOwner.getAppUrl()) == null;
+        return lastStates.get(appOwner.getAppUrl()) != null &&
+                lastStates.get(appOwner.getAppUrl()) == appOwner.getStatus();
     }
     
     private static final long TWO_HOUR = 2 * 60 * 60 * 1000l;
@@ -238,5 +250,10 @@ public class MonitorService {
         long now = System.currentTimeMillis();
         map.put(app.getAppUrl(), now);
         return lastMonitorTime != null && (now - lastMonitorTime) < TWO_HOUR;
+    }
+    
+    public static void main(String[] args) {
+        Integer statest = lastStates.get("aaaa");
+        System.out.println(statest);
     }
 }

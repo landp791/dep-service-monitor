@@ -1,8 +1,6 @@
 package com.dep.monitor.quartz;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,13 +11,9 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.service.MonitorService;
-import com.google.common.collect.Maps;
 
 public class OneAppMonitorJob extends QuartzJobBean{
 	private static final Log logger = LogFactory.getLog(OneAppMonitorJob.class);
-	private static final long TWO_HOUR = 2 * 60 * 60 * 1000l;
-	
-	private static Map<String, Long> map = Maps.newConcurrentMap();
 	
 	private MonitorService monitorService;
 	
@@ -35,24 +29,12 @@ public class OneAppMonitorJob extends QuartzJobBean{
 		try {
 		    logger.debug("OneAppMonitorJob quartz runs begin!!now:" + System.currentTimeMillis());
 			List<AppOwner> apps = appOwnerReadRepo.findAll();
-			for (AppOwner app : apps) {
-				if (!haveMonitoredInTwoHour(app)) {
-					monitorService.monitorOneApp(app.getAppUrl());
-				}
-			}
+            for (AppOwner app : apps) {
+                monitorService.monitorOneApp(app.getAppUrl());
+            }
 			logger.debug("OneAppMonitorJob quartz runs finish!!now:" + System.currentTimeMillis());
 		} catch (Exception e) {
 			logger.error("Execute OneAppMonitorJob fail.", e);
 		} 
-	}
-	
-	private boolean haveMonitoredInTwoHour(AppOwner app) {
-		Long lastMonitorTime = map.get(app.getAppUrl());
-		long now = System.currentTimeMillis();
-		if (lastMonitorTime == null || (now - lastMonitorTime) > TWO_HOUR) {
-			map.put(app.getAppUrl(), now);
-			return false;
-		}
-		return true;
 	}
 }

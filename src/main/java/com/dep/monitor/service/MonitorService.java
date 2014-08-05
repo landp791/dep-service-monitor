@@ -10,6 +10,7 @@ import static com.dep.monitor.util.HttpClientHelper.isOK;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PreDestroy;
 
@@ -29,6 +30,7 @@ import com.dep.monitor.controller.MonitorController;
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.model.MonitorInfo;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
+import com.google.common.collect.Maps;
 
 @Service
 public class MonitorService {
@@ -193,6 +195,7 @@ public class MonitorService {
 		mailService.sendMail(mailInfo);
 	}
 	
+	private static Map<String, Integer> lastStates = Maps.newConcurrentMap(); 
 	public void monitorOneApp(String url) throws Exception {
 		AppOwner appOwner = appOwnerReadRepo.findByAppUrl(url);
 		if (appOwner == null) {
@@ -201,7 +204,39 @@ public class MonitorService {
 		}
 		
 		monitorAndMarkDownResult(appOwner);
-		MonitorInfo mailInfo = prepareMailInfo(appOwner);
-		mailService.sendMail(mailInfo);
+        if (isNeedToSendMail(appOwner)){
+            lastStates.put(appOwner.getAppUrl(), appOwner.getStatus());
+            MonitorInfo mailInfo = prepareMailInfo(appOwner);
+            mailService.sendMail(mailInfo);
+        }
 	}
+
+    private boolean isNeedToSendMail(AppOwner appOwner) {
+        if (isOKNow(appOwner) && statesNotChanged(appOwner)) {
+            logger.debug("App[" + appOwner.getAppUrl() + "] is always ok, not need to send mail.");
+            return false;
+        } else if (!isOKNow(appOwner) && statesNotChanged(appOwner) && haveMonitoredInTwoHour(appOwner)) {
+            logger.info("App[" + appOwner.getAppUrl() + "] is bad and in 2 hours, not need to send mail.");
+            return false;
+        } // else send mail
+        return true;
+    }
+	
+	private boolean isOKNow(AppOwner appOwner) {
+	    return APP_STATUS_GOOD == appOwner.getStatus();
+	}
+	
+    private boolean statesNotChanged(AppOwner appOwner) {
+        return lastStates.get(appOwner.getAppUrl()) == appOwner.getStatus() || 
+                lastStates.get(appOwner.getAppUrl()) == null;
+    }
+    
+    private static final long TWO_HOUR = 2 * 60 * 60 * 1000l;
+    private static Map<String, Long> map = Maps.newConcurrentMap();
+    private boolean haveMonitoredInTwoHour(AppOwner app) {
+        Long lastMonitorTime = map.get(app.getAppUrl());
+        long now = System.currentTimeMillis();
+        map.put(app.getAppUrl(), now);
+        return lastMonitorTime != null && (now - lastMonitorTime) < TWO_HOUR;
+    }
 }

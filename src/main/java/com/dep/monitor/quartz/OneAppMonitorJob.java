@@ -5,17 +5,16 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.dep.monitor.model.AppOwner;
 import com.dep.monitor.repo.read.AppOwnerReadRepository;
 import com.dep.monitor.service.MonitorService;
 import com.google.common.collect.Maps;
 
-@Component
-public class OneAppMonitorJob{
+public class OneAppMonitorJob extends QuartzJobBean{
 	private static final Log logger = LogFactory.getLog(OneAppMonitorJob.class);
 	private static final long ONE_HOUR = 1 * 60 * 60 * 1000l;
 	
@@ -30,17 +29,17 @@ public class OneAppMonitorJob{
 		appOwnerReadRepo = (AppOwnerReadRepository)ContextHolder.getBean("appOwnerReadRepository");
 	}
 	
-	@Scheduled(fixedDelay = 10000)
-	public void execute() throws JobExecutionException {
+	@Override
+	protected void executeInternal(JobExecutionContext context)	throws JobExecutionException {
 		try {
-			long now = System.currentTimeMillis();
-		    logger.debug("OneAppMonitorJob quartz runs once!!now:" + now);
+		    logger.debug("OneAppMonitorJob quartz runs begin!!now:" + System.currentTimeMillis());
 			List<AppOwner> apps = appOwnerReadRepo.findAll();
 			for (AppOwner app : apps) {
 				if (!haveMonitoredInOneHour(app)) {
 					monitorService.monitorOneApp(app.getAppUrl());
 				}
 			}
+			logger.debug("OneAppMonitorJob quartz runs finish!!now:" + System.currentTimeMillis());
 		} catch (Exception e) {
 			logger.error("Execute OneAppMonitorJob fail.", e);
 		} 

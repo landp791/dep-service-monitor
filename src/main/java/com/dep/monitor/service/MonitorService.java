@@ -1,5 +1,6 @@
 package com.dep.monitor.service;
 
+import static java.lang.String.format;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_BAD;
 import static com.dep.monitor.util.MonitorConstants.APP_STATUS_GOOD;
 import static com.dep.monitor.util.MonitorConstants.MAIL_TYPE_ALL;
@@ -67,6 +68,7 @@ public class MonitorService {
 
 	private void monitorAndMarkDownResult(AppOwner... apps) {
 		for (AppOwner app : apps) {
+		    logger.info(format("Monitor appName:%s|appUrl:%s", app.getAppName(), app.getAppUrl()));
 			if (monitor(app.getAppUrl())) {
 				app.setStatus(APP_STATUS_GOOD);
 			} else {

@@ -81,7 +81,6 @@
         <property name="generateDdl" value="true"/>
     </bean>
 
-<!-- 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
         <property name="jdbcUrl" value="jdbc:mysql://10.20.12.170:3306/depmonitor"/>
@@ -94,8 +93,8 @@
         <property name="maxStatements" value="100"/>
         <property name="testConnectionOnCheckout" value="true"/>
     </bean>
-     -->
 
+<!-- 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -103,7 +102,8 @@
 		<property name="username" value="root" />
 		<property name="password" value="root" />
 	</bean>  
-    
+ -->
+     
     <bean id="readEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
     	<property name="dataSource" ref="dataSource"/>
         <property name="persistenceUnitManager" ref="persistenceUnitManager" />

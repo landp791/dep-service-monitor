@@ -31,7 +31,7 @@
 		<property name="cronExpression" value="0 0 10 ? * MON-FRI"/>
 		<property name="cronExpression" value="0/10 * * * * ?"/>
 		 -->
-		<property name="cronExpression" value="0 0 14 ? * MON-FRI"/>
+		<property name="cronExpression" value="0 0 10 ? * MON-FRI"/>
 	</bean>
 	
 	<bean id="cornTrigger"

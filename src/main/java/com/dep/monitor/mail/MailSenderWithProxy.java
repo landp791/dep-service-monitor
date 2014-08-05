@@ -3,6 +3,7 @@ package com.dep.monitor.mail;
 import static java.lang.String.format;
 import static com.dep.monitor.util.HttpClientHelper.isOK;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -68,6 +69,7 @@ public abstract class MailSenderWithProxy implements MailSender {
 
 	@Override
 	public void send(MonitorInfo mailInfo) throws Exception {
+	    log.info("Send mail to " + mailInfo.getToMailAddrs());
 		MailInfo mailInfoView = refineMailInfoView(mailInfo);
 		List<NameValuePair> nvps = prepareRequestParas(mailInfoView);
 		
@@ -77,16 +79,18 @@ public abstract class MailSenderWithProxy implements MailSender {
 
 		if (isOK(resp)) {
 			log.debug("Sending mail OK.");
+		} else {
+		    log.error("Sending mail fail!!.");
 		}
 	}
 
-	private List<NameValuePair> prepareRequestParas(MailInfo mailInfoView) {
+	private List<NameValuePair> prepareRequestParas(MailInfo mailInfoView) throws UnsupportedEncodingException {
 		List<NameValuePair> nvps = Lists.newArrayList();
 		nvps.add(new BasicNameValuePair("to", mailInfoView.getTo()));
-		nvps.add(new BasicNameValuePair("subject", mailInfoView.getSubject()));
+		nvps.add(new BasicNameValuePair("subject", new String(mailInfoView.getSubject().getBytes(), "UTF-8")));
 		nvps.add(new BasicNameValuePair("content", mailInfoView.getContent()));
 		log.debug(format("Mail will be sent.To:%s}Subject:%s|Content:%s", mailInfoView.getTo(),
-				mailInfoView.getSubject(), mailInfoView.getContent()));
+		        new String(mailInfoView.getSubject().getBytes(), "UTF-8"), mailInfoView.getContent()));
 		return nvps;
 	}
 	

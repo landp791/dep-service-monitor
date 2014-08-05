@@ -1,5 +1,6 @@
 package com.dep.monitor.quartz;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import com.google.common.collect.Maps;
 
 public class OneAppMonitorJob extends QuartzJobBean{
 	private static final Log logger = LogFactory.getLog(OneAppMonitorJob.class);
-	private static final long ONE_HOUR = 1 * 60 * 60 * 1000l;
+	private static final long TWO_HOUR = 2 * 60 * 60 * 1000l;
 	
 	private static Map<String, Long> map = Maps.newConcurrentMap();
 	
@@ -35,7 +36,7 @@ public class OneAppMonitorJob extends QuartzJobBean{
 		    logger.debug("OneAppMonitorJob quartz runs begin!!now:" + System.currentTimeMillis());
 			List<AppOwner> apps = appOwnerReadRepo.findAll();
 			for (AppOwner app : apps) {
-				if (!haveMonitoredInOneHour(app)) {
+				if (!haveMonitoredInTwoHour(app)) {
 					monitorService.monitorOneApp(app.getAppUrl());
 				}
 			}
@@ -45,10 +46,10 @@ public class OneAppMonitorJob extends QuartzJobBean{
 		} 
 	}
 	
-	private boolean haveMonitoredInOneHour(AppOwner app) {
+	private boolean haveMonitoredInTwoHour(AppOwner app) {
 		Long lastMonitorTime = map.get(app.getAppUrl());
 		long now = System.currentTimeMillis();
-		if (lastMonitorTime == null || (now - lastMonitorTime) > ONE_HOUR) {
+		if (lastMonitorTime == null || (now - lastMonitorTime) > TWO_HOUR) {
 			map.put(app.getAppUrl(), now);
 			return false;
 		}

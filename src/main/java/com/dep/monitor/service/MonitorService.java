@@ -56,13 +56,15 @@ public class MonitorService {
 		try {
 			HttpHead head = new HttpHead(url);
 			HttpResponse resp = httpClient.execute(head);
-			
-			return isOK(resp);
+			boolean result = isOK(resp);
+			logger.info("Monitoring url:" + url + ". Result:" + result);
+			return result;
 		} catch (ClientProtocolException e) {
 			logger.error("Client protocal is not valid![" + url + "]", e);
 		} catch (IOException e) {
 			logger.error("Something is wrong![" + url + "]", e);
 		}
+		logger.error("Monitoring url:" + url + " occurs Exception.");
 		return false;
 	}
 

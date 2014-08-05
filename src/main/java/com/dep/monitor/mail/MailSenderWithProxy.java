@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static com.dep.monitor.util.HttpClientHelper.isOK;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -69,7 +70,7 @@ public abstract class MailSenderWithProxy implements MailSender {
 
 	@Override
 	public void send(MonitorInfo mailInfo) throws Exception {
-	    log.info("Send mail to " + mailInfo.getToMailAddrs());
+	    log.info("Send mail to " + Arrays.asList(mailInfo.getToMailAddrs()));
 		MailInfo mailInfoView = refineMailInfoView(mailInfo);
 		List<NameValuePair> nvps = prepareRequestParas(mailInfoView);
 		

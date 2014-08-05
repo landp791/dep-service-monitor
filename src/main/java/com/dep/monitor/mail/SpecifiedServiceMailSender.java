@@ -48,7 +48,7 @@ public class SpecifiedServiceMailSender extends MailSenderWithProxy{
     
     private void parseWhenServiceGood(MonitorInfo mailInfo) {
         templateFile = GOOD_NEWS_TEMPLATE;
-        subject = "[部门服务监控]服务已经正常工作";
+        subject = "[部门服务监控]服务正常工作";
         
         Map<String, Object> model = Maps.newHashMap();
         model.put("url", mailInfo.getGoodUrls().get(0));

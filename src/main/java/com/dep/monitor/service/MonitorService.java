@@ -225,7 +225,7 @@ public class MonitorService {
 
     private boolean isNeedToSendMail(AppOwner appOwner) {
         if (isOKNow(appOwner) && statesNotChanged(appOwner)) {
-            logger.debug("App[" + appOwner.getAppUrl() + "] is always ok, not need to send mail.");
+            logger.info("App[" + appOwner.getAppUrl() + "] is always ok, not need to send mail.");
             return false;
         } else if (!isOKNow(appOwner) && statesNotChanged(appOwner) && haveMonitoredInTwoHour(appOwner)) {
             logger.info("App[" + appOwner.getAppUrl() + "] is bad and in 2 hours, not need to send mail.");

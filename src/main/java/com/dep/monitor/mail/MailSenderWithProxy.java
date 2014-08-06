@@ -90,7 +90,7 @@ public abstract class MailSenderWithProxy implements MailSender {
 		nvps.add(new BasicNameValuePair("to", mailInfoView.getTo()));
 		nvps.add(new BasicNameValuePair("subject", new String(mailInfoView.getSubject().getBytes(), "UTF-8")));
 		nvps.add(new BasicNameValuePair("content", mailInfoView.getContent()));
-		log.debug(format("Mail will be sent.To:%s}Subject:%s|Content:%s", mailInfoView.getTo(),
+		log.debug(format("Mail will be sent.To:%s|Subject:%s|Content:%s", mailInfoView.getTo(),
 		        new String(mailInfoView.getSubject().getBytes(), "UTF-8"), mailInfoView.getContent()));
 		return nvps;
 	}

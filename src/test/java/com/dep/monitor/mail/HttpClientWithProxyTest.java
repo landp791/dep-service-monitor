@@ -45,6 +45,7 @@ public class HttpClientWithProxyTest {
             HttpHost proxy = new HttpHost("10.37.84.124", 8080);
             httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
             HttpGet httpget = new HttpGet("http://www.baidu.com/");
+            
             HttpResponse response = httpclient.execute(httpget);
 
             assertEquals(true,isOK(response));

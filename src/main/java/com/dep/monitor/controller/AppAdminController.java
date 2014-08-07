@@ -3,6 +3,8 @@ package com.dep.monitor.controller;
 import static java.lang.String.format;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -51,8 +53,8 @@ public class AppAdminController {
 	public void updateService(@RequestParam("id")String id,
 			@RequestParam("appName")String appName,
 			@RequestParam("appUrl")String appUrl,
-			@RequestParam("owner")String owner) {
-		logger.debug("update service is invoked!");
+			@RequestParam("owner")String owner) throws UnsupportedEncodingException {
+		logger.info("update service is invoked!appName:" + URLDecoder.decode(appName, "UTF-8"));
 		Long idLong = Long.valueOf(id);
 		logger.debug("update service is invoked!id:" + id);
 		AppOwner appOwnerDto = appOwnerRepo.findOne(idLong);

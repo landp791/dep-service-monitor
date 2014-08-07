@@ -11,9 +11,9 @@
 </head>
 <body>
     <h2>部门服务监控管理</h2>
-    <p>Click the buttons on datagrid toolbar to do crud actions.</p>
+    <p>点击表格上方的按钮，新增、编辑和删除被监控的服务。</p>
     
-    <table id="dg" title="All services" class="easyui-datagrid" style="width:1000px;height:500px"
+    <table id="dg" title="All services" class="easyui-datagrid" style="width:1100px;height:500px"
             url="api/all/query"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true">
@@ -21,8 +21,8 @@
             <tr>
             	<th field="id" width="50">Id</th>
                 <th field="appName" width="250">Service Name</th>
-                <th field="appUrl" width="250">Health check url</th>
-                <th field="owner" width="550">Owners</th>
+                <th field="appUrl" width="400">Health check url</th>
+                <th field="owner" width="500">Owners</th>
             </tr>
         </thead>
     </table>
